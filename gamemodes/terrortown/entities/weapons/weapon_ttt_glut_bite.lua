@@ -75,6 +75,40 @@ if SERVER then
 
 end
 
+function SWEP:Deploy()
+  local owner = self:GetOwner()
+  local appetite_state = owner:GetNWInt("Appetite", 0)
+  owner:SetNWBool("Knife_Out", true)
+
+  if appetite_state == 0 then
+
+  elseif appetite_state == 1 then
+
+  elseif appetite_state == 2 then
+
+  elseif appetite_state == 3 then
+
+  elseif appetite_state == 4 then
+
+  end
+end
+
+function SWEP:Holster(weapon)
+  local owner = self:GetOwner()
+  local appetite_state = owner:GetNWInt("Appetite", 0)
+  owner:SetNWBool("Knife_Out", false)
+
+  if appetite_state == 0 then
+  elseif appetite_state == 1 then
+  elseif appetite_state == 2 then
+  elseif appetite_state == 3 then
+    return false
+  elseif appetite_state == 4 then
+    return false
+  end
+  return true
+end
+
 function SWEP:GetState()
   return self:GetNWInt("bite_state", BITE_NONE)
 end
@@ -147,7 +181,7 @@ function SWEP:PrimaryAttack()
 
   if SERVER and tr.Hit and tr.HitNonWorld and IsValid(hitEnt) and hitEnt:IsPlayer() then
 
-    if hitEnt:Health() < (self.Primary.Damage + 10) then
+    if hitEnt:Health() < (self.Primary.Damage) then
       self:StabKill(tr, spos, sdest)
     else
       local dmg = DamageInfo()
@@ -163,6 +197,7 @@ function SWEP:PrimaryAttack()
       local heal_amount = dmg_dealt * 0.2
 
       self:GetOwner():SetHealth(self:GetOwner():Health() + heal_amount)
+      self:GetOwner():SetNWBool("Ate", true)
     end
   end
 
@@ -247,6 +282,7 @@ function SWEP:StabKill(tr, spos, sdest)
   target:DispatchTraceAttack(dmg, spos + (self:GetOwner():GetAimVector() * 3), sdest)
   local heal_amount = 10
   self:GetOwner():SetHealth(self:GetOwner():Health() + heal_amount)
+  self:GetOwner():SetNWBool("Ate", true)
 end
 
 function SWEP:Error()
@@ -275,6 +311,7 @@ function SWEP:FinishEat()
   local new_max_health = old_max_health + body_eat_bonus
   local health_dif = new_max_health - old_max_health
   self:GetOwner():SetHealth(self:GetOwner():Health() + health_dif)
+  self:GetOwner():SetNWBool("Ate", true)
 
   self:DropRemains(self.eatTarget)
   if not CLIENT then self.eatTarget:Remove() end
@@ -287,9 +324,22 @@ end
 
 if SERVER then
   function SWEP:Think()
+    local owner = self:GetOwner()
+    local appetite_state = owner:GetNWInt("Appetite", 0)
+
+    if appetite_state == 0 then
+      self.Primary.Damage = 0
+    elseif appetite_state == 1 then
+      self.Primary.Damage = 20
+    elseif appetite_state == 2 then
+      self.Primary.Damage = 40
+    elseif appetite_state == 3 then
+      self.Primary.Damage = 60
+    elseif appetite_state == 4 then
+      self.Primary.Damage = 101
+    end
     if self:GetState() ~= BITE_EAT then return end
 
-    local owner = self:GetOwner()
     local eatTime = 5.00
 
     if CurTime() >= self:GetStartTime() + eatTime - 0.01 then
