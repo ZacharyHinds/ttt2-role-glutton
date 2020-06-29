@@ -2,27 +2,27 @@ if SERVER then
   AddCSLuaFile()
 end
 
-function ROLE:PreInitialization()
+function ROLE:PreInitialize()
   self.color = Color(227, 19, 0, 255)
 
-  self.abbr = "glut"
-  self.surviveBonus = 0.5
-  self.scoreKillsMultiplier = 5
-  self.scoreTeamKillsMuiltiplier = -16
+	self.abbr = "gl" -- abbreviation
+	self.surviveBonus = 0.5 -- bonus multiplier for every survive while another player was killed
+	self.scoreKillsMultiplier = 5 -- multiplier for kill of player of another team
+	self.scoreTeamKillsMultiplier = -16 -- multiplier for teamkill
 
-  self.defaultTeam = TEAM_TRAITOR
-  self.defaultEquipment = SPECIAL_EQUIPMENT
+	self.defaultEquipment = SPECIAL_EQUIPMENT -- here you can set up your own default equipment
+	self.defaultTeam = TEAM_TRAITOR
 
-  self.conVarData = {
-    pct = 0.1,
-    maximum = 1,
-    minPlayers = 6,
-    togglable = true,
-    traitorButton = 1,
-    credits = 0,
-    shopFallback = SHOP_TRAITOR,
-    random = 20
-  }
+	self.conVarData = {
+		pct = 0.17, -- necessary: percentage of getting this role selected (per player)
+		maximum = 1, -- maximum amount of roles in a round
+		minPlayers = 6, -- minimum amount of players until this role is able to get selected
+		credits = 0, -- the starting credits of a specific role
+		togglable = true, -- option to toggle a role for a client if possible (F1 menu)
+		random = 50,
+		traitorButton = 1, -- can use traitor buttons
+		shopFallback = SHOP_FALLBACK_TRAITOR
+	}
 end
 
 function ROLE:Initialize()
@@ -34,11 +34,11 @@ if SERVER then
     if not isRoleChange then return end
 
     ply:GiveEquipmentWeapon("weapon_ttt_glut_bite")
-    ply:GiveEquipmentWeapon("weapon_ttt_glut_consume")
+
   end
 
   function ROLE:RemoveRoleLoadout(ply, isRoleChange)
     ply:StripWeapon("weapon_ttt_glut_bite")
-    ply:StripWeapon("weapon_ttt_glut_consume")
+
   end
 end
