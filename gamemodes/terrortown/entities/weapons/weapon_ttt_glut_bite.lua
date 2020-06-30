@@ -297,7 +297,7 @@ function SWEP:Error()
 end
 
 function SWEP:DropRemains(rag)
-  if IsValid(self.eatTarget) then return end
+  if not IsValid(self.eatTarget) then return end
   local pos = self.eatTarget:GetPos()
 
   local jitter = VectorRand() * 20
@@ -327,6 +327,9 @@ function SWEP:BeginEat(rag)
   self:SetStartTime(CurTime())
   self:SetEatTime(eatTime)
   self.eatTarget = rag
+  timer.Create("EatBlood", 0.05, 0, function(rag)
+    self:DropRemains()
+  end)
 end
 
 function SWEP:FinishEat()
@@ -337,12 +340,13 @@ function SWEP:FinishEat()
   self:GetOwner():SetHealth(self:GetOwner():Health() + health_dif)
   self:GetOwner():SetNWBool("Ate", true)
 
-
+  timer.Remove("EatBlood")
   if not CLIENT and IsValid(self.eatTarget) then self.eatTarget:Remove() end
   self:Reset()
 end
 
 function SWEP:CancelEat()
+  timer.Remove("EatBlood")
   self:Reset()
 end
 
@@ -383,8 +387,6 @@ if SERVER then
     elseif not owner:KeyDown(IN_ATTACK2) or owner:GetEyeTrace(MASK_SHOT_HULL).Entity ~= self.eatTarget then
       self:CancelEat()
       self:Error()
-    else
-      self:DropRemains(self.eatTarget)
     end
   end
 
