@@ -36,6 +36,12 @@ function ROLE:Initialize()
 end
 
 if SERVER then
+  util.AddNetworkString("glut_hungry")
+  util.AddNetworkString("glut_starving")
+  util.AddNetworkString("glut_insatiable")
+  util.AddNetworkString("glut_rav")
+  util.AddNetworkString("tt2_glut_pop")
+
   function ROLE:GiveRoleLoadout(ply, isRoleChange)
     if not isRoleChange then return end
 
@@ -81,10 +87,42 @@ if SERVER then
       print(ply:Nick() .. " is Starving")
     elseif appetite_state == AP_INSATIABLE then
       print(ply:Nick() .. " is Insatiable")
+      ply:SetNWBool("DoBloody", true)
+      ply:StripWeapons()
+      ply:GiveEquipmentWeapon("weapon_ttt_glut_bite")
     elseif appetite_state == AP_RAVENOUS then
       print(ply:Nick() .. " is Ravenous")
       ply:SetRole(ROLE_RAVENOUS)
       SendFullStateUpdate()
+    end
+
+    SendPop(appetite_state, ply:SteamID64())
+  end
+
+  function SendPop(id, ply_steam)
+    local net_id = nil
+    if id == AP_HUNGRY then
+      net_id = "glut_hungry"
+    elseif id == AP_STARVING then
+      net_id = "glut_starving"
+    elseif id == AP_INSATIABLE then
+      net_id = "glut_insatiable"
+    elseif id == AP_RAVENOUS then
+      net_id = "glut_rav"
+    end
+
+    for _, ply in ipairs(player.GetAll()) do
+      if ply:IsPlayer() and not ply:IsBot() then
+        net.Start(net_id)
+        net.WriteString(ply_steam)
+        net.WriteBool(true)
+        net.Send(ply)
+        -- timer.Simple(5, function(ply)
+        --   net.Start(net_id)
+        --   net.WriteBool(false)
+        --   net.Send(ply)
+        -- end)
+      end
     end
   end
 
@@ -93,6 +131,7 @@ if SERVER then
       ply:SetNWInt("Appetite", nil)
       ply:SetNWInt("Hunger", nil)
       ply:SetNWBool("Ate", false)
+      ply:SetNWBool("DoBloody", false)
     end
   end)
 
@@ -161,6 +200,152 @@ if SERVER then
       app_stamina_mod = 1.4
     elseif appetite_state == 3 then
       app_stamina_mod = 1.6
+    end
+  end)
+end
+
+if CLIENT then
+  net.Receive("glut_hungry", function()
+    local client = LocalPlayer()
+    client.epopId = client.epopId or {}
+
+    local steam_id = net.ReadString()
+    local glut_ply = player.GetBySteamID64(steam_id)
+    local shouldAdd = net.ReadBool()
+
+    if client:GetTeam() ~= TEAM_TRAITOR or client:GetSubRole() == ROLE_GLUTTON then return end
+
+    if shouldAdd then
+      if client:SteamID64() == steam_id then
+        client.epopId["glut_hungry"] = EPOP:AddMessage(
+        {
+          text = LANG.GetTranslation("glut_hungry"),
+          color = GLUTTON.ltcolor
+        }
+        )
+      else
+        client.epopId["glut_hungry"] = EPOP:AddMessage(
+        {
+          text = LANG.GetParamTranslation("glut_hungry_tm", {nick = glut_ply:Nick()}),
+          color = GLUTTON.ltcolor
+        }
+        )
+      end
+    else
+      if client.epopId["glut_hungry"] then
+        EPOP:RemoveMessage(client.epopId["glut_hungry"])
+      end
+    end
+  end)
+
+  net.Receive("glut_starving", function()
+    local client = LocalPlayer()
+    client.epopId = client.epopId or {}
+
+    local steam_id = net.ReadString()
+    local glut_ply = player.GetBySteamID64(steam_id)
+    local shouldAdd = net.ReadBool()
+
+    if client:GetTeam() ~= TEAM_TRAITOR or client:GetSubRole() ~= ROLE_GLUTTON then return end
+
+    if shouldAdd then
+      if client:SteamID64() == steam_id then
+        client.epopId["glut_starving"] = EPOP:AddMessage(
+        {
+          text = LANG.GetTranslation("glut_starving"),
+          color = GLUTTON.ltcolor
+        },
+        LANG.GetTranslation("glut_starving_text")
+        )
+      else
+        client.epopId["glut_starving"] = EPOP:AddMessage(
+        {
+          text = LANG.GetParamTranslation("glut_starving_tm", {nick = glut_ply:Nick()}),
+          color = GLUTTON.ltcolor
+        },
+        LANG.GetTranslation("glut_starving_tm_text")
+        )
+      end
+    else
+      if client.epopId["glut_starving"] then
+        EPOP:RemoveMessage(client.epopId["glut_starving"])
+      end
+    end
+  end)
+
+  net.Receive("glut_insatiable", function()
+    local client = LocalPlayer()
+    client.epopId = client.epopId or {}
+
+    local steam_id = net.ReadString()
+    local glut_ply = player.GetBySteamID64(steam_id)
+    local shouldAdd = net.ReadBool()
+
+    if client:GetTeam() ~= TEAM_TRAITOR or client:GetSubRole() ~= ROLE_GLUTTON then return end
+
+    if shouldAdd then
+      if client:SteamID64() == steam_id then
+        client.epopId["glut_insatiable"] = EPOP:AddMessage(
+        {
+          text = LANG.GetTranslation("glut_insatiable"),
+          color = GLUTTON.ltcolor
+        },
+        LANG.GetTranslation("glut_insatiable_text")
+        )
+      else
+        client.epopId["glut_insatiable"] = EPOP:AddMessage(
+        {
+          text = LANG.GetParamTranslation("glut_insatiable_tm", {nick = glut_ply:Nick()}),
+          color = GLUTTON.ltcolor
+        },
+        LANG.GetTranslation("glut_insatiable_tm_text")
+        )
+      end
+    else
+      if client.epopId["glut_insatiable"] then
+        EPOP:RemoveMessage(client.epopId["glut_insatiable"])
+      end
+    end
+  end)
+
+  net.Receive("glut_rav", function()
+    local client = LocalPlayer()
+    client.epopId = client.epopId or {}
+
+    local steam_id = net.ReadString()
+    local glut_ply = player.GetBySteamID64(steam_id)
+    local shouldAdd = net.ReadBool()
+
+    if shouldAdd then
+      if client:SteamID64() == steam_id then
+        client.epopId["glut_rav"] = EPOP:AddMessage(
+        {
+          text = LANG.GetTranslation("glut_rav"),
+          color = GLUTTON.ltcolor
+        },
+        LANG.GetTranslation("glut_rav_text")
+        )
+      elseif client:GetTeam() == TEAM_TRAITOR then
+        client.epopId["glut_rav"] = EPOP:AddMessage(
+        {
+          text = LANG.GetParamTranslation("glut_rav_traitors", {nick = glut_ply:Nick()}),
+          color = GLUTTON.ltcolor
+        },
+        LANG.GetTranslation("glut_rav_traitors_text")
+        )
+      else
+        client.epopId["glut_rav"] = EPOP:AddMessage(
+        {
+          text = LANG.GetTranslation("glut_rav_all"),
+          color = GLUTTON.ltcolor
+        },
+        LANG.GetTranslation("glut_rav_all_text")
+        )
+      end
+    else
+      if client.epopId["glut_rav"] then
+        EPOP:RemoveMessage(client.epopId["glut_rav"])
+      end
     end
   end)
 end
