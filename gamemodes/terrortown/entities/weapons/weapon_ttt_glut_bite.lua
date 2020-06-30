@@ -52,6 +52,13 @@ local swingSound = Sound("WeaponFrag.Throw")
 local hitSound = Sound("Flesh.ImpactHard")
 local BITE_EAT = 1
 local BITE_NONE = 0
+
+local AP_NONE = 0
+local AP_HUNGRY = 1
+local AP_STARVING = 2
+local AP_INSATIABLE = 3
+local AP_RAVENOUS = 4
+
 if SERVER then
   function SWEP:Initialize()
     self:SetHoldType("knife")
@@ -80,15 +87,15 @@ function SWEP:Deploy()
   local appetite_state = owner:GetNWInt("Appetite", 0)
   owner:SetNWBool("Knife_Out", true)
 
-  if appetite_state == 0 then
+  if appetite_state == AP_NONE then
 
-  elseif appetite_state == 1 then
+  elseif appetite_state == AP_HUNGRY then
 
-  elseif appetite_state == 2 then
+  elseif appetite_state == AP_STARVING then
 
-  elseif appetite_state == 3 then
+  elseif appetite_state == AP_INSATIABLE then
 
-  elseif appetite_state == 4 then
+  elseif appetite_state == AP_RAVENOUS then
 
   end
 end
@@ -98,12 +105,12 @@ function SWEP:Holster(weapon)
   local appetite_state = owner:GetNWInt("Appetite", 0)
   owner:SetNWBool("Knife_Out", false)
 
-  if appetite_state == 0 then
-  elseif appetite_state == 1 then
-  elseif appetite_state == 2 then
-  elseif appetite_state == 3 then
+  if appetite_state == AP_NONE then
+  elseif appetite_state == AP_HUNGRY then
+  elseif appetite_state == AP_STARVING then
+  elseif appetite_state == AP_INSATIABLE then
     return false
-  elseif appetite_state == 4 then
+  elseif appetite_state == AP_RAVENOUS then
     return false
   end
   return true
@@ -290,7 +297,12 @@ function SWEP:Error()
 end
 
 function SWEP:DropRemains(rag)
+  if IsValid(self.eatTarget) then return end
   local pos = self.eatTarget:GetPos()
+
+  local jitter = VectorRand() * 20
+  jitter.z = 20
+  util.PaintDown(pos + jitter, "Blood", rag)
 end
 
 function SWEP:BeginEat(rag)
@@ -298,6 +310,18 @@ function SWEP:BeginEat(rag)
   local ply = CORPSE.GetPlayer(rag)
 
   local eatTime = 5.00
+  local appetite_state = self:GetOwner():GetNWInt("Appetite", 0)
+
+  if appetite_state == AP_NONE then
+  elseif appetite_state == AP_HUNGRY then
+    eatTime = 5.00
+  elseif appetite_state == AP_STARVING then
+    eatTime = 4.00
+  elseif appetite_state == AP_INSATIABLE then
+    eatTime = 2.00
+  elseif appetite_state == AP_RAVENOUS and self:GetOwner():GetSubRole() == ROLE_RAVENOUS then
+    eatTime = 1.00
+  end
 
   self:SetState(BITE_EAT)
   self:SetStartTime(CurTime())
@@ -313,8 +337,8 @@ function SWEP:FinishEat()
   self:GetOwner():SetHealth(self:GetOwner():Health() + health_dif)
   self:GetOwner():SetNWBool("Ate", true)
 
-  self:DropRemains(self.eatTarget)
-  if not CLIENT then self.eatTarget:Remove() end
+
+  if not CLIENT and IsValid(self.eatTarget) then self.eatTarget:Remove() end
   self:Reset()
 end
 
@@ -341,12 +365,26 @@ if SERVER then
     if self:GetState() ~= BITE_EAT then return end
 
     local eatTime = 5.00
+    local appetite_state = owner:GetNWInt("Appetite", 0)
+
+    if appetite_state == AP_NONE then
+    elseif appetite_state == AP_HUNGRY then
+      eatTime = 5.00
+    elseif appetite_state == AP_STARVING then
+      eatTime = 4.00
+    elseif appetite_state == AP_INSATIABLE then
+      eatTime = 2.00
+    elseif appetite_state == AP_RAVENOUS and owner:GetSubRole() == ROLE_RAVENOUS then
+      eatTime = 1.00
+    end
 
     if CurTime() >= self:GetStartTime() + eatTime - 0.01 then
       self:FinishEat()
     elseif not owner:KeyDown(IN_ATTACK2) or owner:GetEyeTrace(MASK_SHOT_HULL).Entity ~= self.eatTarget then
       self:CancelEat()
       self:Error()
+    else
+      self:DropRemains(self.eatTarget)
     end
   end
 

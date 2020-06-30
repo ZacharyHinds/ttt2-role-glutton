@@ -2,11 +2,6 @@ if SERVER then
   AddCSLuaFile()
 end
 
-roles.InitCustomTeam(ROLE.name, {
-  icon = ""
-  color = Color(56, 27, 27, 255)
-})
-
 local AP_NONE = 0
 local AP_HUNGRY = 1
 local AP_STARVING = 2
@@ -45,7 +40,9 @@ if SERVER then
     if not isRoleChange then return end
 
     ply:GiveEquipmentWeapon("weapon_ttt_glut_bite")
-
+    ply:SetNWInt("Appetite", 1)
+    ply:SetNWInt("Hunger", 30 + CurTime())
+    ActivateAppetite(ply)
   end
 
   function ROLE:RemoveRoleLoadout(ply, isRoleChange)
@@ -87,6 +84,7 @@ if SERVER then
     elseif appetite_state == AP_RAVENOUS then
       print(ply:Nick() .. " is Ravenous")
       ply:SetRole(ROLE_RAVENOUS)
+      SendFullStateUpdate()
     end
   end
 
@@ -94,6 +92,7 @@ if SERVER then
     for _, ply in ipairs(player.GetAll()) do
       ply:SetNWInt("Appetite", nil)
       ply:SetNWInt("Hunger", nil)
+      ply:SetNWBool("Ate", false)
     end
   end)
 
@@ -116,10 +115,6 @@ if SERVER then
           ply:SetNWInt("Appetite", ply:GetNWInt("Appetite", 0) + 1)
           ply:SetNWInt("Hunger", CurTime() + GetHunger(ply))
           ActivateAppetite(ply)
-        end
-        if ply:GetNWInt("Hunger", 0) < CurTime() and ply:GetNWInt("Appetite", 0) >= AP_RAVENOUS then
-          ply:TakeDamage(1, game.GetWorld())
-          ply:SetNWInt("Hunger", CurTime() + 1)
         end
       end
     end
@@ -144,8 +139,6 @@ if SERVER then
       app_speed_mod = 1.4
     elseif appetite_state == 3 then
       app_speed_mod = 1.6
-    elseif appetite_state == 4 then
-      app_speed_mod = 1.8
     end
 
     speedMultiplierModifier[1] = speedMultiplierModifier[1] * app_speed_mod
@@ -165,11 +158,9 @@ if SERVER then
     if appetite_state == 1 then
       app_stamina_mod = 1.2
     elseif appetite_state == 2 then
-      app_stamina_mod = 1.5
+      app_stamina_mod = 1.4
     elseif appetite_state == 3 then
-      app_stamina_mod = 1.8
-    elseif appetite_state == 4 then
-      app_stamina_mod = 2.0
+      app_stamina_mod = 1.6
     end
   end)
 end
