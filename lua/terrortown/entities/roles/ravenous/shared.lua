@@ -78,4 +78,20 @@ if SERVER then
 
     stamina_mod[1] = stamina_mod[1] * 2
   end)
+
+  hook.Add("TTTEndRound", "ClearRavHunger", function()
+    for _, ply in ipairs(player.GetAll()) do
+      ply:SetNWInt("Appetite", 0)
+      ply:SetNWInt("Hunger", 0)
+      ply:SetNWBool("Ate", false)
+    end
+  end)
+
+  hook.Add("TTTPrepRound", "PrepRavHunger", function()
+    for _, ply in ipairs(player.GetAll()) do
+      ply:SetNWInt("Appetite", 0)
+      ply:SetNWInt("Hunger", 0)
+      ply:SetNWBool("Ate", false)
+    end
+  end)
 end
