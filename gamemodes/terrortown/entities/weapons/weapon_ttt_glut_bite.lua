@@ -3,7 +3,7 @@ if SERVER then
 end
 
 if CLIENT then
-  SWEP.PrintName = "glutton_bite_name"
+  SWEP.PrintName = "Devour"
 
   SWEP.ViewModelFlip = false
   SWEP.ViewModelFOV = 54
@@ -421,7 +421,7 @@ if CLIENT then
   function SWEP:SecondaryAttack()
 
   end
-  local colorRed = Color(160, 36, 30)
+  local colorRed = Color(196, 35, 35)
 
   hook.Add("TTTRenderEntityInfo", "ttt2_glut_eat_display_info", function(tData)
     local ent = tData:GetEntity()
