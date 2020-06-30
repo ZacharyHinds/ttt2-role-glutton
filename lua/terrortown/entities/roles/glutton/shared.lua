@@ -90,8 +90,16 @@ if SERVER then
 
   hook.Add("TTTEndRound", "ClearGlutHunger", function()
     for _, ply in ipairs(player.GetAll()) do
-      ply:SetNWInt("Appetite", nil)
-      ply:SetNWInt("Hunger", nil)
+      ply:SetNWInt("Appetite", 0)
+      ply:SetNWInt("Hunger", 0)
+      ply:SetNWBool("Ate", false)
+    end
+  end)
+
+  hook.Add("TTTPrepRound", "PrepGlutHunger", function()
+    for _, ply in ipairs(player.GetAll()) do
+      ply:SetNWInt("Appetite", 0)
+      ply:SetNWInt("Hunger", 0)
       ply:SetNWBool("Ate", false)
     end
   end)
