@@ -20,5 +20,23 @@ L["search_role_" .. RAVENOUS.abbr] = "This person was Ravenous!"
 L["target_" .. RAVENOUS.name] = "Ravenous"
 L["ttt2_desc_" .. RAVENOUS.name] = [[The Ravenous has been consumed by their hunger, they must kill everyone to win!]]
 
+-- EPOPs
+
+L["glut_hungry_tm"] = "[{nick}] is hungry!"
+L["glut_hungry"] = "You are hungry!"
+L["glut_starving_tm"] = "[{nick}] is now starving!"
+L["glut_starving_tm_text"] = "Their hunger continues to grow!"
+L["glut_insatiable_tm"] = "[{nick}] is now insatiable!"
+L["glut_insatiable_tm_text"] = "If their hunger grows much more, they will betray you!"
+L["glut_starving"] = "You are now starving!"
+L["glut_starving_text"] = "Your bite is stronger, you move faster with it equipped, and your hunger grows more rapidly!"
+L["glut_insatiable"] = "You are now insatiable!"
+L["glut_insatiable_text"] = "Your bite is stronger, you are faster! If you become hungrier you will be on your own!"
+L["glut_rav_traitors"] = "[{nick}] has become Ravenous!"
+L["glut_rav_traitors_text"] = "They have been consumed by their hunger and betrayed the Traitors!"
+L["glut_rav"] = "Your hunger has consumed you, you are now Ravenous!"
+L["glut_rav_text"] = "You are no longer a traitor, you must kill all to win!"
+L["glut_rav_all"] = "The Ravenous has Awoken!"
+L["glut_rav_all_text"] = "Watch for their bloody trail, they have come to eat!"
 
 -- OTHER ROLE LANGUAGE STRINGS

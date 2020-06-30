@@ -45,12 +45,21 @@ function ROLE:RemoveRoleLoadout(ply, isRoleChange)
 end
 
 if SERVER then
+  hook.Add("TTTEndRound", "ClearRavBlood", function()
+    for _, ply in ipairs(player.GetAll()) do
+      ply:SetNWInt("Hunger", nil)
+      ply:SetNWBool("DoBloody", false)
+      ply:SetNWInt("Appetite", nil)
+      ply:SetNWBool("Ate", false)
+    end
+  end)
+
   hook.Add("Think", "ThinkRav", function()
     for _, ply in ipairs(player.GetAll()) do
       if ply:IsActive() and ply:GetSubRole() == ROLE_RAVENOUS then
         if ply:GetNWInt("Hunger", 0) < CurTime() and ply:GetSubRole() == ROLE_RAVENOUS then
-          ply:TakeDamage(1, game.GetWorld())
-          ply:SetNWInt("Hunger", CurTime() + 0.5)
+          ply:TakeDamage(5, game.GetWorld())
+          ply:SetNWInt("Hunger", CurTime() + 2)
         end
       end
     end

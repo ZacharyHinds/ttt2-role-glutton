@@ -123,7 +123,7 @@ if CLIENT then -- CLIENT
 		if HUDEditor.IsEditing then
 			self:DrawComponent(1, color)
 		elseif multiplier then
-			self:DrawComponent(multiplier, color, client:GetNWInt("Appetite", 0) and appetite_name)
+			self:DrawComponent(multiplier, color, true and appetite_name)
 		end
 	end
 end
