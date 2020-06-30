@@ -40,7 +40,6 @@ if SERVER then
   util.AddNetworkString("glut_starving")
   util.AddNetworkString("glut_insatiable")
   util.AddNetworkString("glut_rav")
-  util.AddNetworkString("tt2_glut_pop")
 
   function ROLE:GiveRoleLoadout(ply, isRoleChange)
     if not isRoleChange then return end
@@ -210,6 +209,16 @@ if SERVER then
       app_stamina_mod = 1.6
     end
   end)
+  -- prevent spy and glutton from spawning together
+  hook.Add("TTT2ModifySelectableRoles", "TTTGlutOrSpy", function(selectableRoles)
+    if not selectableRoles[GLUTTON] or not selectableRoles[SPY] then return end
+
+		if math.random(2) == 2 then
+			selectableRoles[GLUTTON] = nil
+		else
+			selectableRoles[SPY] = nil
+		end
+  end)
 end
 
 if CLIENT then
@@ -219,9 +228,15 @@ if CLIENT then
 
     local steam_id = net.ReadString()
     local glut_ply = player.GetBySteamID64(steam_id)
+    if IsValid(glut_ply) then
+      local glut_nick = glut_ply:Nick()
+    else
+      local glut_nick = "The Glutton"
+    end
+    if not glut_nick then glut_nick = "The Glutton" end
     local shouldAdd = net.ReadBool()
 
-    if client:GetTeam() ~= TEAM_TRAITOR or client:GetSubRole() == ROLE_GLUTTON then return end
+    if client:GetTeam() ~= TEAM_TRAITOR then return end
 
     if shouldAdd then
       if client:SteamID64() == steam_id then
@@ -234,7 +249,7 @@ if CLIENT then
       else
         client.epopId["glut_hungry"] = EPOP:AddMessage(
         {
-          text = LANG.GetParamTranslation("glut_hungry_tm", {nick = glut_ply:Nick()}),
+          text = LANG.GetParamTranslation("glut_hungry_tm", {nick = glut_nick}),
           color = GLUTTON.ltcolor
         }
         )
@@ -252,9 +267,15 @@ if CLIENT then
 
     local steam_id = net.ReadString()
     local glut_ply = player.GetBySteamID64(steam_id)
+    if IsValid(glut_ply) then
+      local glut_nick = glut_ply:Nick()
+    else
+      local glut_nick = "The Glutton"
+    end
+    if not glut_nick then glut_nick = "The Glutton" end
     local shouldAdd = net.ReadBool()
 
-    if client:GetTeam() ~= TEAM_TRAITOR or client:GetSubRole() ~= ROLE_GLUTTON then return end
+    if client:GetTeam() ~= TEAM_TRAITOR then return end
 
     if shouldAdd then
       if client:SteamID64() == steam_id then
@@ -268,7 +289,7 @@ if CLIENT then
       else
         client.epopId["glut_starving"] = EPOP:AddMessage(
         {
-          text = LANG.GetParamTranslation("glut_starving_tm", {nick = glut_ply:Nick()}),
+          text = LANG.GetParamTranslation("glut_starving_tm", {nick = glut_nick}),
           color = GLUTTON.ltcolor
         },
         LANG.GetTranslation("glut_starving_tm_text")
@@ -287,9 +308,15 @@ if CLIENT then
 
     local steam_id = net.ReadString()
     local glut_ply = player.GetBySteamID64(steam_id)
+    if IsValid(glut_ply) then
+      local glut_nick = glut_ply:Nick()
+    else
+      local glut_nick = "The Glutton"
+    end
+    if not glut_nick then glut_nick = "The Glutton" end
     local shouldAdd = net.ReadBool()
 
-    if client:GetTeam() ~= TEAM_TRAITOR or client:GetSubRole() ~= ROLE_GLUTTON then return end
+    if client:GetTeam() ~= TEAM_TRAITOR then return end
 
     if shouldAdd then
       if client:SteamID64() == steam_id then
@@ -303,7 +330,7 @@ if CLIENT then
       else
         client.epopId["glut_insatiable"] = EPOP:AddMessage(
         {
-          text = LANG.GetParamTranslation("glut_insatiable_tm", {nick = glut_ply:Nick()}),
+          text = LANG.GetParamTranslation("glut_insatiable_tm", {nick = glut_nick}),
           color = GLUTTON.ltcolor
         },
         LANG.GetTranslation("glut_insatiable_tm_text")
@@ -322,6 +349,12 @@ if CLIENT then
 
     local steam_id = net.ReadString()
     local glut_ply = player.GetBySteamID64(steam_id)
+    if IsValid(glut_ply) then
+      local glut_nick = glut_ply:Nick()
+    else
+      local glut_nick = "The Glutton"
+    end
+    if not glut_nick then glut_nick = "The Glutton" end
     local shouldAdd = net.ReadBool()
 
     if shouldAdd then
@@ -336,7 +369,7 @@ if CLIENT then
       elseif client:GetTeam() == TEAM_TRAITOR then
         client.epopId["glut_rav"] = EPOP:AddMessage(
         {
-          text = LANG.GetParamTranslation("glut_rav_traitors", {nick = glut_ply:Nick()}),
+          text = LANG.GetParamTranslation("glut_rav_traitors", {nick = glut_nick}),
           color = GLUTTON.ltcolor
         },
         LANG.GetTranslation("glut_rav_traitors_text")

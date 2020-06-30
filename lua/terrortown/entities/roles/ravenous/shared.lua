@@ -31,6 +31,12 @@ function ROLE:PreInitialize()
 	}
 end
 
+function ROLE:Initialize()
+  if SERVER and JESTER then
+    self.networkRoles = {JESTER}
+  end
+end
+
 function ROLE:GiveRoleLoadout(ply, isRoleChange)
   if not isRoleChange then return end
   ply:StripWeapons()
