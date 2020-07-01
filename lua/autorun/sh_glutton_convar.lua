@@ -42,30 +42,12 @@ hook.Add("TTTUlxDynamicRCVars", "ttt2_ulx_dynamic_glut_convars", function(tbl)
   })
 
   table.insert(tbl[ROLE_GLUTTON], {
-    cvar = "ttt2_glut_speed_bonus_hungry",
-    slider = true,
-    min = 0.1,
-    max = 2.0,
-    decimal = 1,
-    desc = "ttt2_glut_speed_bonus_hungry (def. 1.2)"
-  })
-
-  table.insert(tbl[ROLE_GLUTTON], {
     cvar = "ttt2_glut_rav_max_health",
     slider = true,
     min = 100,
     max = 500,
     decimal = 0,
     desc = "ttt2_glut_rav_max_health (def. 250)"
-  })
-
-  table.insert(tbl[ROLE_GLUTTON], {
-    cvar = "ttt2_glut_speed_bonus_hungry",
-    slider = true,
-    min = 0.1,
-    max = 2.0,
-    decimal = 1,
-    desc = "ttt2_glut_speed_bonus_hungry (def. 1.2)"
   })
 
   table.insert(tbl[ROLE_GLUTTON], {
@@ -284,5 +266,5 @@ hook.Add("TTTUlxDynamicRCVars", "ttt2_ulx_dynamic_rav_convars", function(tbl)
     decimal = 1,
     desc = "ttt2_rav_stam_regen (def. 2.0)"
   })
-  
+
 end)
