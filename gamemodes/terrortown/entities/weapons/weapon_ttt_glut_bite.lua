@@ -201,10 +201,15 @@ function SWEP:PrimaryAttack()
 
       hitEnt:DispatchTraceAttack(dmg, spos + (self:GetOwner():GetAimVector() * 3), sdest)
       local dmg_dealt = dmg:GetDamage()
-      local heal_amount = dmg_dealt * 0.2
-
-      self:GetOwner():SetHealth(self:GetOwner():Health() + heal_amount)
-      self:GetOwner():SetNWBool("Ate", true)
+      local heal_amount = dmg_dealt * math.Round(GetConVar("ttt2_glut_devour_heal_multi"):GetFloat(), 1)
+      if heal_amount + self:GetOwner():Health() < GetConVar("ttt2_glut_rav_max_health"):GetInt() then
+        self:GetOwner():SetHealth(self:GetOwner():Health() + heal_amount)
+      else
+        self:GetOwner():SetHealth(GetConVar("ttt2_glut_rav_max_health"):GetInt())
+        self:GetOwner():SetMaxHealth(GetConVar("ttt2_glut_rav_max_health"):GetInt())
+      end
+      self:GetOwner():SetNWBool("Ate_Part", true)
+      self:GetOwner():SetNWInt("Ate_Multiplier", GetConVar("ttt2_glut_devour_bite_hunger"):GetFloat())
     end
   end
 
@@ -287,9 +292,15 @@ function SWEP:StabKill(tr, spos, sdest)
   end
 
   target:DispatchTraceAttack(dmg, spos + (self:GetOwner():GetAimVector() * 3), sdest)
-  local heal_amount = 10
-  self:GetOwner():SetHealth(self:GetOwner():Health() + heal_amount)
-  self:GetOwner():SetNWBool("Ate", true)
+  local heal_amount = GetConVar("ttt2_glut_devour_kill_bonus"):GetInt()
+  if self:GetOwner():Health() + heal_amount < GetConVar("ttt2_glut_rav_max_health"):GetInt() then
+    self:GetOwner():SetHealth(self:GetOwner():Health() + heal_amount)
+  else
+    self:GetOwner():SetHealth(GetConVar("ttt2_glut_rav_max_health"):GetInt())
+    self:GetOwner():SetMaxHealth(GetConVar("ttt2_glut_rav_max_health"):GetInt())
+  end
+  self:GetOwner():SetNWInt("Ate_Multiplier", GetConVar("ttt2_glut_devour_kill_hunger"):GetFloat())
+  self:GetOwner():SetNWBool("Ate_Part", true)
 end
 
 function SWEP:Error()
@@ -314,32 +325,39 @@ function SWEP:BeginEat(rag)
 
   if appetite_state == AP_NONE then
   elseif appetite_state == AP_HUNGRY then
-    eatTime = 5.00
+    eatTime = math.Round(GetConVar("ttt2_glut_eat_time_hungry"):GetFloat(), 2)
   elseif appetite_state == AP_STARVING then
-    eatTime = 4.00
+    eatTime = math.Round(GetConVar("ttt2_glut_eat_time_starving"):GetFloat(), 2)
   elseif appetite_state == AP_INSATIABLE then
-    eatTime = 2.00
+    eatTime = math.Round(GetConVar("ttt2_glut_eat_time_insatiable"):GetFloat(), 2)
   elseif appetite_state == AP_RAVENOUS and self:GetOwner():GetSubRole() == ROLE_RAVENOUS then
-    eatTime = 1.00
+    eatTime = math.Round(GetConVar("ttt2_rav_eat_time"):GetFloat(), 2)
   end
 
   self:SetState(BITE_EAT)
   self:SetStartTime(CurTime())
   self:SetEatTime(eatTime)
   self.eatTarget = rag
-  timer.Create("EatBlood", 0.05, 0, function(rag)
+  timer.Create("EatBlood", GetConVar("ttt2_eat_bleed_amount"):GetFloat(), 0, function(rag)
     self:DropRemains()
   end)
 end
 
 function SWEP:FinishEat()
-  local body_eat_bonus = 50
+  local body_eat_bonus = GetConVar("ttt2_glut_devour_body_heal"):GetInt()
   local old_max_health = self:GetOwner():GetMaxHealth()
   local new_max_health = old_max_health + body_eat_bonus
+  if new_max_health > GetConVar("ttt2_glut_rav_max_health"):GetInt() then new_max_health = GetConVar("ttt2_glut_rav_max_health"):GetInt() end
   local health_dif = new_max_health - old_max_health
-  self:GetOwner():SetHealth(self:GetOwner():Health() + health_dif)
-  self:GetOwner():SetNWBool("Ate", true)
-
+  if health_dif + self:GetOwner():Health() <= GetConVar("ttt2_glut_rav_max_health"):GetInt() then
+    self:GetOwner():SetMaxHealth(new_max_health)
+    self:GetOwner():SetHealth(self:GetOwner():Health() + health_dif)
+    self:GetOwner():SetNWBool("Ate_Full", true)
+  elseif health_dif + self:GetOwner():Health() > GetConVar("ttt2_glut_rav_max_health"):GetInt() then
+    self:GetOwner():SetHealth(GetConVar("ttt2_glut_rav_max_health"):GetInt())
+    self:GetOwner():SetMaxHealth(GetConVar("ttt2_glut_rav_max_health"):GetInt())
+    self:GetOwner():SetNWBool("Ate_Full", true)
+  end
   timer.Remove("EatBlood")
   if not CLIENT and IsValid(self.eatTarget) then self.eatTarget:Remove() end
   self:Reset()
@@ -358,28 +376,28 @@ if SERVER then
     if appetite_state == 0 then
       self.Primary.Damage = 0
     elseif appetite_state == 1 then
-      self.Primary.Damage = 20
+      self.Primary.Damage = GetConVar("ttt2_glut_devour_dmg_hungry"):GetInt()
     elseif appetite_state == 2 then
-      self.Primary.Damage = 40
+      self.Primary.Damage = GetConVar("ttt2_glut_devour_dmg_starving"):GetInt()
     elseif appetite_state == 3 then
-      self.Primary.Damage = 60
+      self.Primary.Damage = GetConVar("ttt2_glut_devour_dmg_insatiable"):GetInt()
     elseif appetite_state == 4 then
-      self.Primary.Damage = 101
+      self.Primary.Damage = GetConVar("ttt2_rav_devour_dmg"):GetInt()
     end
     if self:GetState() ~= BITE_EAT then return end
 
-    local eatTime = 5.00
+    local eatTime = GetConVar("ttt2_glut_eat_time_hungry"):GetFloat()
     local appetite_state = owner:GetNWInt("Appetite", 0)
 
     if appetite_state == AP_NONE then
     elseif appetite_state == AP_HUNGRY then
-      eatTime = 5.00
+      eatTime = math.Round(GetConVar("ttt2_glut_eat_time_hungry"):GetFloat(), 2)
     elseif appetite_state == AP_STARVING then
-      eatTime = 4.00
+      eatTime = math.Round(GetConVar("ttt2_glut_eat_time_starving"):GetFloat(), 2)
     elseif appetite_state == AP_INSATIABLE then
-      eatTime = 2.00
+      eatTime = math.Round(GetConVar("ttt2_glut_eat_time_insatiable"):GetFloat(), 2)
     elseif appetite_state == AP_RAVENOUS and owner:GetSubRole() == ROLE_RAVENOUS then
-      eatTime = 1.00
+      eatTime = math.Round(GetConVar("ttt2_rav_eat_time"):GetFloat(), 2)
     end
 
     if CurTime() >= self:GetStartTime() + eatTime - 0.01 then

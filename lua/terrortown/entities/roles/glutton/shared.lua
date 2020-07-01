@@ -1,5 +1,6 @@
 if SERVER then
   AddCSLuaFile()
+  resource.AddFile("materials/vgui/ttt/dynamic/roles/icon_glut.vmt")
 end
 
 local AP_NONE = 0
@@ -9,9 +10,9 @@ local AP_INSATIABLE = 3
 local AP_RAVENOUS = 4
 
 function ROLE:PreInitialize()
-  self.color = Color(227, 19, 0, 255)
+  self.color = Color(199, 40, 16, 255)
 
-	self.abbr = "gl" -- abbreviation
+	self.abbr = "glut" -- abbreviation
 	self.surviveBonus = 0.5 -- bonus multiplier for every survive while another player was killed
 	self.scoreKillsMultiplier = 5 -- multiplier for kill of player of another team
 	self.scoreTeamKillsMultiplier = -16 -- multiplier for teamkill
@@ -46,7 +47,7 @@ if SERVER then
 
     ply:GiveEquipmentWeapon("weapon_ttt_glut_bite")
     ply:SetNWInt("Appetite", 1)
-    ply:SetNWInt("Hunger", 30 + CurTime())
+    ply:SetNWInt("Hunger", GetConVar("ttt2_glut_hungry"):GetInt() + CurTime())
     ActivateAppetite(ply)
   end
 
@@ -62,11 +63,11 @@ if SERVER then
     local appetite_state = ply:GetNWInt("Appetite", 0)
 
     if appetite_state == AP_HUNGRY then
-      return 30
+      return GetConVar("ttt2_glut_hungry"):GetInt()
     elseif appetite_state == AP_STARVING then
-      return 20
+      return GetConVar("ttt2_glut_starving"):GetInt()
     elseif appetite_state == AP_INSATIABLE then
-      return 10
+      return GetConVar("ttt2_glut_insatiable"):GetInt()
     elseif appetite_state == AP_RAVENOUS then
       return 0
     end
@@ -129,7 +130,8 @@ if SERVER then
     for _, ply in ipairs(player.GetAll()) do
       ply:SetNWInt("Appetite", 0)
       ply:SetNWInt("Hunger", 0)
-      ply:SetNWBool("Ate", false)
+      ply:SetNWBool("Ate_Full", false)
+      ply:SetNWBool("Ate_Part", false)
     end
   end)
 
@@ -137,7 +139,18 @@ if SERVER then
     for _, ply in ipairs(player.GetAll()) do
       ply:SetNWInt("Appetite", 0)
       ply:SetNWInt("Hunger", 0)
-      ply:SetNWBool("Ate", false)
+      ply:SetNWBool("Ate_Full", false)
+      ply:SetNWBool("Ate_Part", false)
+      ply:SetNWBool("DoBloody", false)
+    end
+  end)
+
+  hook.Add("TTTBeginRound", "BeginClearHunger", function()
+    for _, ply in ipairs(player.GetAll()) do
+      ply:SetNWInt("Appetite", 0)
+      ply:SetNWInt("Hunger", 0)
+      ply:SetNWBool("Ate_Full", false)
+      ply:SetNWBool("Ate_Part", false)
       ply:SetNWBool("DoBloody", false)
     end
   end)
@@ -152,14 +165,24 @@ if SERVER then
   hook.Add("Think", "ThinkHunger", function()
     for _, ply in ipairs(player.GetAll()) do
       if ply:IsActive() and ply:GetSubRole() == ROLE_GLUTTON then
-        if ply:GetNWBool("Ate", false) and ply:GetNWInt("Appetite", 0) < AP_RAVENOUS then
+        if ply:GetNWBool("Ate_Full", false) and ply:GetNWInt("Appetite", 0) < AP_RAVENOUS then
           print(ply:Nick() .. " ate!")
           ply:SetNWInt("Hunger", CurTime() + GetHunger(ply))
-          ply:SetNWBool("Ate", false)
+          ply:SetNWBool("Ate_Full", false)
+          ply:SetNWBool("Ate_Part", false)
+        elseif ply:GetNWBool("Ate_Part", false) and ply:GetNWInt("Appetite", 0) < AP_RAVENOUS then
+          local old_hunger = ply:GetNWInt("Hunger", 0)
+          local new_hunger = old_hunger + (GetHunger(ply) * ply:GetNWInt("Ate_Multiplier", 1))
+          if new_hunger > CurTime() + GetHunger(ply) then new_hunger = CurTime() + GetHunger(ply) end
+          ply:SetNWInt("Hunger", new_hunger)
+          ply:SetNWBool("Ate_Part", false)
+          ply:SetNWBool("Ate_Full", false)
+          ply:SetNWInt("Ate_Multiplier", 1)
         end
         if ply:GetNWInt("Hunger", 0) < CurTime() and ply:GetNWInt("Appetite", 0) < AP_RAVENOUS then
           ply:SetNWInt("Appetite", ply:GetNWInt("Appetite", 0) + 1)
           ply:SetNWInt("Hunger", CurTime() + GetHunger(ply))
+          ply:SetNWInt("Ate_Multiplier", 1)
           ActivateAppetite(ply)
         end
       end
@@ -180,11 +203,11 @@ if SERVER then
     if appetite_state == 0 then return end
 
     if appetite_state == 1 then
-      app_speed_mod = 1.2
+      app_speed_mod = GetConVar("ttt2_glut_speed_bonus_hungry"):GetFloat()
     elseif appetite_state == 2 then
-      app_speed_mod = 1.4
+      app_speed_mod = GetConVar("ttt2_glut_speed_bonus_starving"):GetFloat()
     elseif appetite_state == 3 then
-      app_speed_mod = 1.6
+      app_speed_mod = GetConVar("ttt2_glut_speed_bonus_insatiable"):GetFloat()
     end
 
     speedMultiplierModifier[1] = speedMultiplierModifier[1] * app_speed_mod
@@ -202,11 +225,11 @@ if SERVER then
     local app_stamina_mod = 1
 
     if appetite_state == 1 then
-      app_stamina_mod = 1.2
+      app_stamina_mod = GetConVar("ttt2_glut_stam_regen_hungry"):GetFloat()
     elseif appetite_state == 2 then
-      app_stamina_mod = 1.4
+      app_stamina_mod = GetConVar("ttt2_glut_stam_regen_starving"):GetFloat()
     elseif appetite_state == 3 then
-      app_stamina_mod = 1.6
+      app_stamina_mod = GetConVar("ttt2_glut_stam_regen_insatiable"):GetFloat()
     end
   end)
   -- prevent spy and glutton from spawning together
