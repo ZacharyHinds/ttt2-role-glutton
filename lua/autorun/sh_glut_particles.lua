@@ -1,7 +1,7 @@
 if CLIENT then
   function DoBloody()
     for _, ply in ipairs(player.GetAll()) do
-      if ply:Alive() and ply:GetNWBool("DoBloody", false) then
+      if ply:Alive() and ply:GetNWBool("DoBloody", false) and GetConVar("ttt2_glut_do_blood_smoke"):GetBool() then
         if not ply.BloodEmitter then ply.BloodEmitter = ParticleEmitter(ply:GetPos()) end
         if not ply.BloodNextPart then ply.BloodNextPart = CurTime() end
 
