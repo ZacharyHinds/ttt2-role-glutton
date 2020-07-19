@@ -3,6 +3,10 @@ if SERVER then
 end
 
 if CLIENT then
+  hook.Add("TTT2FinishedLoading", "mes_devicon", function() -- addon developer emblem for me ^_^
+    AddTTT2AddonDev("76561198049910438")
+  end)
+
   SWEP.PrintName = "Devour"
 
   SWEP.ViewModelFlip = false
@@ -347,15 +351,17 @@ function SWEP:FinishEat()
   local body_eat_bonus = GetConVar("ttt2_glut_devour_body_heal"):GetInt()
   local old_max_health = self:GetOwner():GetMaxHealth()
   local new_max_health = old_max_health + body_eat_bonus
-  if new_max_health > GetConVar("ttt2_glut_rav_max_health"):GetInt() then new_max_health = GetConVar("ttt2_glut_rav_max_health"):GetInt() end
+  if new_max_health > GetConVar("ttt2_glut_rav_max_health"):GetInt() then
+    new_max_health = GetConVar("ttt2_glut_rav_max_health"):GetInt()
+  end
   local health_dif = new_max_health - old_max_health
-  if health_dif + self:GetOwner():Health() <= GetConVar("ttt2_glut_rav_max_health"):GetInt() then
+  if health_dif + self:GetOwner():Health() <= GetConVar("ttt2_glut_rav_max_health"):GetInt() and health_dif > 0 then
     self:GetOwner():SetMaxHealth(new_max_health)
     self:GetOwner():SetHealth(self:GetOwner():Health() + health_dif)
     self:GetOwner():SetNWBool("Ate_Full", true)
-  elseif health_dif + self:GetOwner():Health() > GetConVar("ttt2_glut_rav_max_health"):GetInt() then
-    self:GetOwner():SetHealth(GetConVar("ttt2_glut_rav_max_health"):GetInt())
-    self:GetOwner():SetMaxHealth(GetConVar("ttt2_glut_rav_max_health"):GetInt())
+  elseif new_max_health == GetConVar("ttt2_glut_rav_max_health"):GetInt() then
+    self:GetOwner():SetMaxHealth(new_max_health)
+    self:GetOwner():SetHealth(new_max_health)
     self:GetOwner():SetNWBool("Ate_Full", true)
   end
   timer.Remove("EatBlood")
