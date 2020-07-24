@@ -38,20 +38,73 @@ function ROLE:Initialize()
   end
 end
 
+if SERVER then
+  ROLE.CustomRadar = function(ply)
+    local targets = {}
+    local corpses = ents.FindByClass("prop_ragdoll")
+
+    for _, crp in ipairs(corpses) do
+      -- verify bodies
+      if not crp.player_ragdoll then continue end
+
+      local pos = crp:LocalToWorld(crp:OBBCenter())
+
+      pos.x = math.Round(pos.x)
+      pos.y = math.Round(pos.y)
+      pos.z = math.Round(pos.z)
+
+      targets[#targets + 1] = {
+        subrole = -1,
+        pos = pos
+      }
+    end
+
+    for _, pl in ipairs(player.GetAll()) do
+      if not IsValid(pl) or pl == ply or pl:HasTeam(TEAM_RAVENOUS) then continue end
+      if pl:IsSpec() or not pl:Alive() then continue end
+
+      local pos = pl:LocalToWorld(pl:OBBCenter())
+
+      pos.x = math.Round(pos.x)
+      pos.y = math.Round(pos.y)
+      pos.z = math.Round(pos.z)
+
+      local subrole = ROLE_RAVENOUS
+      local team = TEAM_RAVENOUS
+
+      targets[#targets + 1] = {
+        subrole = subrole,
+        team = team,
+        pos = pos
+      }
+    end
+
+    return targets
+  end
+
+  ROLE.radarTime = GetConVar("ttt2_rav_radar_time"):GetInt()
+end
+
 function ROLE:GiveRoleLoadout(ply, isRoleChange)
   if not isRoleChange then return end
   ply:StripWeapons()
   ply:GiveEquipmentWeapon("weapon_ttt_glut_bite")
+  ply:GiveEquipmentItem("item_ttt_radar")
   ply:SelectWeapon("weapon_ttt_glut_bite")
   ply:SetNWInt("Appetite", AP_RAVENOUS)
 end
 
 function ROLE:RemoveRoleLoadout(ply, isRoleChange)
   ply:StripWeapon("weapon_ttt_glut_bite")
-
+  ply:RemoveEquipmentItem("item_ttt_radar")
 end
 
 if SERVER then
+
+  -- Ravenous has a custom radar
+  -- Shows players and corpses
+
+
   hook.Add("TTTEndRound", "ClearRavBlood", function()
     for _, ply in ipairs(player.GetAll()) do
       ply:SetNWInt("Hunger", nil)

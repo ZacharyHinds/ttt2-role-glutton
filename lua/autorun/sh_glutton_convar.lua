@@ -22,6 +22,7 @@ CreateConVar("ttt2_glut_stam_regen_insatiable", 1.6, {FCVAR_ARCHIVE, FCVAR_NOTIF
 CreateConVar("ttt2_eat_bleed_amount", 0.05, {FCVAR_ARCHIVE, FCVAR_NOTIFY}) -- Rate at which body bleeds while being eaten using devour
 CreateConVar("ttt2_glut_rav_max_health", 250, {FCVAR_ARCHIVE, FCVAR_NOTIFY}) -- Maximum possible health for both glutton and ravenous
 CreateConVar("ttt2_glut_do_blood_smoke", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY}) -- Toggle blood smoke effect
+CreateConVar("ttt2_rav_radar_time", 15, {FCVAR_ARCHIVE, FCVAR_NOTIFY}) -- Radar delay for ravenous
 
 hook.Add("TTTUlxDynamicRCVars", "ttt2_ulx_dynamic_glut_convars", function(tbl)
   tbl[ROLE_GLUTTON] = tbl[ROLE_GLUTTON] or {}
@@ -265,6 +266,14 @@ hook.Add("TTTUlxDynamicRCVars", "ttt2_ulx_dynamic_rav_convars", function(tbl)
     max = 2.0,
     decimal = 1,
     desc = "ttt2_rav_stam_regen (def. 2.0)"
+  })
+
+  table.insert(tbl[ROLE_RAVENOUS], {
+    cvar = "ttt2_rav_radar_time",
+    slider = true,
+    min = 1,
+    max = 60,
+    desc = "ttt2_rav_radar_time (def. 15)"
   })
 
 end)
