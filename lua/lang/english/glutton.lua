@@ -25,10 +25,10 @@ L["appetite_hungry"] = "hungry"
 L["appetite_starving"] = "starving"
 L["appetite_insatiable"] = "insatiable"
 L["appetite_ravenous"] = "ravenous"
-L["appetite_HUD"] = "Appetite: {appetite}"
+L["appetite_HUD"] = "Hunger: {appetite} %"
 
 -- EPOPs
-L["glut_hungry_tm"] = "{nick} is hungry!"
+L["glut_hungry_tm"] = "The Glutton is hungry!"
 L["glut_hungry"] = "You are hungry!"
 L["glut_starving_tm"] = "{nick} is now starving!"
 L["glut_starving_tm_text"] = "Their hunger continues to grow!"

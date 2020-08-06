@@ -86,28 +86,28 @@ if CLIENT then -- CLIENT
 		if not color then return end
 
 		if client:IsActive() and client:Alive() and client:GetSubRole() == ROLE_GLUTTON then
-			if client:GetNWInt("Appetite", 0) > 0 then
-				local hungerTime = client:GetNWInt("Hunger", 0)
-				local appetite_state = client:GetNWInt("Appetite", 0)
-				local delay = 1
+			if client:GetNWInt("Hunger_Level", 0) > 0 then
+				local hungerTime = client:GetNWInt("Hunger_Level", 0)
+				-- local appetite_state = client:GetNWInt("Appetite", 0)
+				local delay = GetConVar("ttt2_glut_hunger"):GetInt()
 				local appetite_name = "none"
 
-				if appetite_state == 1 then
-					delay = 30
-					appetite_name = "Hungry"
-				elseif appetite_state == 2 then
-					delay = 20
-					appetite_name = "Starving"
-				elseif appetite_state == 3 then
-					delay = 10
-					appetite_name = "Insatiable"
-				elseif appetite_state == 4 then
-					delay = 1
-					appetite_name = "Ravenous"
-				end
+				-- if appetite_state == 1 then
+				-- 	delay = 30
+				-- 	appetite_name = "Hungry"
+				-- elseif appetite_state == 2 then
+				-- 	delay = 20
+				-- 	appetite_name = "Starving"
+				-- elseif appetite_state == 3 then
+				-- 	delay = 10
+				-- 	appetite_name = "Insatiable"
+				-- elseif appetite_state == 4 then
+				-- 	delay = 1
+				-- 	appetite_name = "Ravenous"
+				-- end
 
-				multiplier = hungerTime - CurTime()
-				multiplier = multiplier / delay
+				-- multiplier = hungerTime - CurTime()
+				multiplier = hungerTime / delay
 
 				local secondColor = GLUTTON.bgcolor
 				local r = color.r - (color.r - secondColor.r) * multiplier
