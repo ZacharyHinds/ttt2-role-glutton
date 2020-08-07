@@ -10,12 +10,20 @@ if SERVER then
       if not ply:GetNWBool("HungerGrows", false) then continue end
 
       if ply:GetNWInt("Hunger_Level") == 0 and ply.hungerTime <= CurTime() then
-        ply:SetRole(ROLE_RAVENOUS, TEAM_RAVENOUS)
+        if GetConVar("ttt2_glut_turn_rav"):GetBool() then
+          ply:SetRole(ROLE_RAVENOUS, TEAM_RAVENOUS)
+          SendFullStateUpdate()
+          net.Start("glut_rav")
+          net.WriteString(ply:SteamID64())
+          net.Broadcast()
+        else
+          ply:SetNWBool("isStarving", true)
+        end
         ply.hungerTime = CurTime() + 2
-        SendFullStateUpdate()
-        net.Start("glut_rav")
-        net.WriteString(ply:SteamID64())
-        net.Broadcast()
+        ply:SetNWBool("DoBloody", true)
+      elseif ply:GetNWInt("Hunger_Level") > 0 and (ply:GetNWBool("DoBloody") or ply:GetNWBool("isStarving")) then
+        ply:SetNWBool("DoBloody", false)
+        ply:SetNWBool("isStarving", false)
       end
 
       if ply.hungerTime <= CurTime() then
@@ -29,11 +37,18 @@ if SERVER then
     end
   end)
 
+  -- hook.Add("Think", "GlutStarveThink", function()
+  --   if GetRoundState() ~= ROUND_ACTIVE then return end
+  --   for _, ply in ipairs(player.GetAll()) do
+  --     if not ply:Alive() or ply:IsSpec() then continue end
+  --
+  -- end)
+
   hook.Add("Think", "RavHungerThink", function()
     if GetRoundState() ~= ROUND_ACTIVE then return end
     for _, ply in ipairs(player.GetAll()) do
       if not ply:Alive() or ply:IsSpec() then continue end
-      if ply:GetSubRole() ~= ROLE_RAVENOUS then continue end
+      if ply:GetSubRole() ~= ROLE_RAVENOUS and not (ply:GetNWBool("isStarving") and ply:GetSubRole() == ROLE_GLUTTON) then continue end
 
       if ply.hungerTime <= CurTime() then
         ply:TakeDamage(GetConVar("ttt2_rav_hurt"):GetInt(), game.GetWorld())
@@ -42,18 +57,43 @@ if SERVER then
     end
   end)
 
+  function ResetGlutPly(ply)
+    ply:SetNWBool("HungerGrows", true)
+    ply:SetNWBool("DoBloody", false)
+    ply:SetNWBool("isStarving", false)
+    ply:SetNWBool("Knife_Out", false)
+    ply.hungerTime = nil
+  end
+
   function ResetGlutton()
     for _, ply in ipairs(player.GetAll()) do
+      if ply:GetSubRole() == ROLE_GLUTTON and GetRoundState() == ROUND_ACTIVE then continue end
       -- ply:SetNWInt("Hunger_Level", 0)
-      ply:SetNWBool("HungerGrows", false)
-      ply.hungerTime = nil
-      ply:SetNWBool("DoBloody", false)
+      ResetGlutPly(ply)
     end
   end
 
   hook.Add("TTTEndRound", "ResetGlutton", ResetGlutton)
   hook.Add("TTTPrepRound", "ResetGlutton", ResetGlutton)
   hook.Add("TTTBeginRound", "ResetGlutton", ResetGlutton)
+
+  hook.Add("TTT2PostPlayerDeath", "ResetGlutton", function(ply)
+    if ply:GetSubRole() == ROLE_GLUTTON or ply:GetSubRole() == ROLE_RAVENOUS then
+      ResetGlutPly(ply)
+    end
+  end)
+
+  hook.Add("PlayerCanPickupWeapon", "NoRavPickup", function(ply, wep)
+    if not ply:Alive() or ply:IsSpec() then return end
+    if wep:GetClass() == "weapon_ttt_glut_bite" then
+      if ply:GetSubRole() ~= ROLE_GLUTTON and ply:GetSubRole() ~= ROLE_RAVENOUS then
+        return false
+      else
+        return
+      end
+    end
+    if ply:GetSubRole() == ROLE_RAVENOUS then return false end
+  end)
 
   function GluttonSpeed(ply, _, _, speedMultiplierModifier)
     if not IsValid(ply) then return end

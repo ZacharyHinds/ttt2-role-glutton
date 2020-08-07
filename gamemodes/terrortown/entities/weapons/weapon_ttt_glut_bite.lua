@@ -100,6 +100,11 @@ function SWEP:Holster(weapon)
   return true
 end
 
+function SWEP:OnDrop()
+  self:GetOwner():SetNWBool("Knife_Out", false)
+  self:Remove()
+end
+
 function SWEP:GetState()
   return self:GetNWInt("bite_state", BITE_NONE)
 end
@@ -280,12 +285,7 @@ function SWEP:StabKill(tr, spos, sdest)
 
   target:DispatchTraceAttack(dmg, spos + (self:GetOwner():GetAimVector() * 3), sdest)
   local heal_amount = GetConVar("ttt2_glut_devour_kill_bonus"):GetInt()
-  if self:GetOwner():Health() + heal_amount < GetConVar("ttt2_glut_rav_max_health"):GetInt() then
-    self:GetOwner():SetHealth(math.Clamp(self:GetOwner():Health() + heal_amount, 0 , GetConVar("ttt2_glut_rav_max_health"):GetInt()))
-  else
-    self:GetOwner():SetHealth(GetConVar("ttt2_glut_rav_max_health"):GetInt())
-    self:GetOwner():SetMaxHealth(GetConVar("ttt2_glut_rav_max_health"):GetInt())
-  end
+  self:GetOwner():SetHealth(math.Clamp(self:GetOwner():Health() + heal_amount, 0 , GetConVar("ttt2_glut_rav_max_health"):GetInt()))
   local devour_kill_feed = GetConVar("ttt2_glut_devour_kill_feed"):GetFloat()
   local feed_amount = GetConVar("ttt2_glut_hunger"):GetInt() * devour_kill_feed
   if self:GetOwner():GetSubRole() == ROLE_GLUTTON then
@@ -331,21 +331,16 @@ end
 function SWEP:FinishEat()
   local body_eat_bonus = GetConVar("ttt2_glut_eat_health"):GetInt()
   local old_max_health = self:GetOwner():GetMaxHealth()
-  local new_max_health = old_max_health + body_eat_bonus
-  if new_max_health > GetConVar("ttt2_glut_rav_max_health"):GetInt() then
-    new_max_health = GetConVar("ttt2_glut_rav_max_health"):GetInt()
-  end
+  local new_max_health = math.Clamp(old_max_health + body_eat_bonus, 0, GetConVar("ttt2_glut_rav_max_health"):GetInt())
+  -- if new_max_health > GetConVar("ttt2_glut_rav_max_health"):GetInt() then
+  --   new_max_health = GetConVar("ttt2_glut_rav_max_health"):GetInt()
+  -- end
   local feed_amount = GetConVar("ttt2_glut_hunger"):GetInt() * GetConVar("ttt2_glut_eat_hunger"):GetFloat()
 
   local health_dif = new_max_health - old_max_health
-  if health_dif + self:GetOwner():Health() <= GetConVar("ttt2_glut_rav_max_health"):GetInt() and health_dif > 0 then
-    self:GetOwner():SetMaxHealth(new_max_health)
-    self:GetOwner():SetHealth(math.Clamp(self:GetOwner():Health() + health_dif, 0, GetConVar("ttt2_glut_rav_max_health"):GetInt()))
+  self:GetOwner():SetMaxHealth(new_max_health)
+  self:GetOwner():SetHealth(math.Clamp(self:GetOwner():Health() + health_dif, 0, GetConVar("ttt2_glut_rav_max_health"):GetInt()))
     -- self:GetOwner():SetNWBool("Ate_Full", true)
-  elseif new_max_health == GetConVar("ttt2_glut_rav_max_health"):GetInt() then
-    self:GetOwner():SetMaxHealth(new_max_health)
-    self:GetOwner():SetHealth(new_max_health)
-  end
   if self:GetOwner():GetSubRole() == ROLE_GLUTTON then
     self:GetOwner():SetNWInt("Hunger_Level", self:GetOwner():GetNWInt("Hunger_Level") + feed_amount)
   end
