@@ -1,7 +1,7 @@
 CreateConVar("ttt2_eat_bleed_amount", 0.05, {FCVAR_ARCHIVE, FCVAR_NOTIFY}) -- Rate at which body bleeds while being eaten using devour
 CreateConVar("ttt2_glut_rav_max_health", 250, {FCVAR_ARCHIVE, FCVAR_NOTIFY}) -- Maximum possible health for both glutton and ravenous
 CreateConVar("ttt2_glut_do_blood_smoke", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY}) -- Toggle blood smoke effect
-CreateConVar("ttt2_glut_hunger", 300, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED})
+CreateConVar("ttt2_glut_hunger", 120, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED})
 CreateConVar("ttt2_glut_devour_dmg_heal", 0.2, {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 CreateConVar("ttt2_glut_devour_dmg_hunger", 0.1, {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 CreateConVar("ttt2_glut_devour_dmg_base", 20, {FCVAR_ARCHIVE, FCVAR_NOTIFY})
