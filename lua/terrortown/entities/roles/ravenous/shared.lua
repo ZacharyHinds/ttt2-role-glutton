@@ -1,5 +1,5 @@
 if SERVER then
-
+  CreateConVar("ttt2_rav_radar_time", 15, {FCVAR_ARCHIVE, FCVAR_NOTIFY}) -- Radar delay for ravenous
   AddCSLuaFile()
   resource.AddFile("materials/vgui/ttt/dynamic/roles/icon_rav.vmt")
 
@@ -82,7 +82,7 @@ if SERVER then
     return targets
   end
 
-  ROLE.radarTime = GetConVar("ttt2_rav_radar_time"):GetInt()
+  ROLE.radarTime = GetConVar("ttt2_rav_radar_time"):GetInt() or 15
 end
 
 function ROLE:GiveRoleLoadout(ply, isRoleChange)
