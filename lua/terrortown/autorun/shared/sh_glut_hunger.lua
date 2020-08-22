@@ -103,7 +103,7 @@ if SERVER then
 
     local base_speed = GetConVar("ttt2_glut_speed_base"):GetFloat()
     local max_speed = GetConVar("ttt2_glut_speed_max"):GetFloat()
-    local speed_multi = base_speed + ((max_speed - base_speed) * (1 - (ply:GetNWInt("Hunger_Level") / ttt2_glut_hunger:GetInt())) )
+    local speed_multi = base_speed + ((max_speed - base_speed) * (1 - (ply:GetNWInt("Hunger_Level") / ttt2_glut_hunger:GetInt())))
 
     speedMultiplierModifier[1] = speedMultiplierModifier[1] * speed_multi
   end
@@ -116,7 +116,7 @@ if SERVER then
 
     local base_stam = GetConVar("ttt2_glut_stamina_base"):GetFloat()
     local max_stam = GetConVar("ttt2_glut_stamina_max"):GetFloat()
-    local stamina_multi = base_stam + ((max_stam - base_stam) * (1 - (ply:GetNWInt("Hunger_Level") / ttt2_glut_hunger:GetInt())) )
+    local stamina_multi = base_stam + ((max_stam - base_stam) * (1 - (ply:GetNWInt("Hunger_Level") / ttt2_glut_hunger:GetInt())))
 
     stamina_mod[1] = stamina_mod[1] * stamina_multi
   end
@@ -133,24 +133,24 @@ if CLIENT then
 
     if client:SteamID64() == steam_id then
       EPOP:AddMessage({
-        text = LANG.GetTranslation("glut_rav"),
-        color = GLUTTON.ltcolor
-      },
-      LANG.GetTranslation("glut_rav_text")
+          text = LANG.GetTranslation("glut_rav"),
+          color = GLUTTON.ltcolor
+        },
+        LANG.GetTranslation("glut_rav_text")
       )
     elseif client:GetTeam() == TEAM_TRAITOR then
       EPOP:AddMessage({
-        text = LANG.GetTranslation("glut_rav_traitors"),
-        color = GLUTTON.ltcolor
-      },
-      LANG.GetTranslation("glut_rav_traitors_text")
+          text = LANG.GetTranslation("glut_rav_traitors"),
+          color = GLUTTON.ltcolor
+        },
+        LANG.GetTranslation("glut_rav_traitors_text")
       )
     else
       EPOP:AddMessage({
-        text = LANG.GetTranslation("glut_rav_all"),
-        color = GLUTTON.ltcolor
-      },
-      LANG.GetTranslation("glut_rav_all_text")
+          text = LANG.GetTranslation("glut_rav_all"),
+          color = GLUTTON.ltcolor
+        },
+        LANG.GetTranslation("glut_rav_all_text")
       )
     end
   end)

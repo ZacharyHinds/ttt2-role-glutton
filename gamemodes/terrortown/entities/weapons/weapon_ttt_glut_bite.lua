@@ -131,20 +131,20 @@ function SWEP:PrimaryAttack()
   local kmaxs = Vector(1, 1, 1) * 10
 
   local tr = util.TraceHull({
-    start = spos,
-    endpos = sdest,
-    filter = self:GetOwner(),
-    mask = MASK_SHOT_HULL,
-    mins = kmins,
-    maxs = kmaxs
+      start = spos,
+      endpos = sdest,
+      filter = self:GetOwner(),
+      mask = MASK_SHOT_HULL,
+      mins = kmins,
+      maxs = kmaxs
   })
 
   if not IsValid(tr.Entity) then
     tr = util.TraceLine({
-      start = spos,
-      endpos = sdest,
-      filter = self:GetOwner(),
-      mask = MASK_SHOT_HULL
+        start = spos,
+        endpos = sdest,
+        filter = self:GetOwner(),
+        mask = MASK_SHOT_HULL
     })
   end
 
@@ -220,20 +220,20 @@ function SWEP:StabKill(tr, spos, sdest)
   dmg:SetDamageType(DMG_SLASH)
 
   local retr = util.TraceLine({
-    start = spos,
-    endpos = sdest,
-    filter = self:GetOwner(),
-    mask = MASK_SHOT_HULL
+      start = spos,
+      endpos = sdest,
+      filter = self:GetOwner(),
+      mask = MASK_SHOT_HULL
   })
 
   if retr.Entity ~= target then
     local center = target:LocalToWorld(target:OBBCenter())
 
     retr = util.TraceLine({
-      start = spos,
-      endpos = sdest,
-      filter = self:GetOwner(),
-      mask = MASK_SHOT_HULL
+        start = spos,
+        endpos = sdest,
+        filter = self:GetOwner(),
+        mask = MASK_SHOT_HULL
     })
   end
 
@@ -260,32 +260,32 @@ function SWEP:StabKill(tr, spos, sdest)
     end
 
     local knife = ents.Create("prop_physics")
-		knife:SetModel("models/weapons/w_knife_t.mdl")
-		knife:SetPos(pos)
-		knife:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
-		knife:SetAngles(ang)
+    knife:SetModel("models/weapons/w_knife_t.mdl")
+    knife:SetPos(pos)
+    knife:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
+    knife:SetAngles(ang)
 
-		knife.CanPickup = false
+    knife.CanPickup = false
 
-		knife:Spawn()
+    knife:Spawn()
 
-		local phys = knife:GetPhysicsObject()
+    local phys = knife:GetPhysicsObject()
 
-		if IsValid(phys) then
-			phys:EnableCollisions(false)
-		end
+    if IsValid(phys) then
+      phys:EnableCollisions(false)
+    end
 
-		constraint.Weld(rag, knife, bone, 0, 0, true)
+    constraint.Weld(rag, knife, bone, 0, 0, true)
 
-		-- need to close over knife in order to keep a valid ref to it
-		rag:CallOnRemove("ttt_knife_cleanup", function()
-			SafeRemoveEntity(knife)
-		end)
+    -- need to close over knife in order to keep a valid ref to it
+    rag:CallOnRemove("ttt_knife_cleanup", function()
+      SafeRemoveEntity(knife)
+    end)
   end
 
   target:DispatchTraceAttack(dmg, spos + (self:GetOwner():GetAimVector() * 3), sdest)
   local heal_amount = GetConVar("ttt2_glut_devour_kill_bonus"):GetInt()
-  self:GetOwner():SetHealth(math.Clamp(self:GetOwner():Health() + heal_amount, 0 , GetConVar("ttt2_glut_rav_max_health"):GetInt()))
+  self:GetOwner():SetHealth(math.Clamp(self:GetOwner():Health() + heal_amount, 0, GetConVar("ttt2_glut_rav_max_health"):GetInt()))
   local devour_kill_feed = GetConVar("ttt2_glut_devour_kill_feed"):GetFloat()
   local feed_amount = GetConVar("ttt2_glut_hunger"):GetInt() * devour_kill_feed
   if self:GetOwner():GetSubRole() == ROLE_GLUTTON then
@@ -340,7 +340,7 @@ function SWEP:FinishEat()
   local health_dif = new_max_health - old_max_health
   self:GetOwner():SetMaxHealth(new_max_health)
   self:GetOwner():SetHealth(math.Clamp(self:GetOwner():Health() + health_dif, 0, GetConVar("ttt2_glut_rav_max_health"):GetInt()))
-    -- self:GetOwner():SetNWBool("Ate_Full", true)
+  -- self:GetOwner():SetNWBool("Ate_Full", true)
   if self:GetOwner():GetSubRole() == ROLE_GLUTTON then
     self:GetOwner():SetNWInt("Hunger_Level", self:GetOwner():GetNWInt("Hunger_Level") + feed_amount)
   end

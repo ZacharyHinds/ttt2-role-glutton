@@ -24,171 +24,171 @@ hook.Add("TTTUlxDynamicRCVars", "ttt2_ulx_dynamic_glut_convars", function(tbl)
   tbl[ROLE_GLUTTON] = tbl[ROLE_GLUTTON] or {}
 
   table.insert(tbl[ROLE_GLUTTON], {
-    cvar = "ttt2_eat_bleed_amount",
-    slider = true,
-    min = 0.00,
-    max = 1.00,
-    decimal = 2,
-    desc = "ttt2_eat_bleed_amount (def. 0.05)"
+      cvar = "ttt2_eat_bleed_amount",
+      slider = true,
+      min = 0.00,
+      max = 1.00,
+      decimal = 2,
+      desc = "ttt2_eat_bleed_amount (def. 0.05)"
   })
 
   table.insert(tbl[ROLE_GLUTTON], {
-    cvar = "ttt2_glut_do_blood_smoke",
-    checkbox = true,
-    desc = "ttt2_glut_do_blood_smoke (def. 1)"
+      cvar = "ttt2_glut_do_blood_smoke",
+      checkbox = true,
+      desc = "ttt2_glut_do_blood_smoke (def. 1)"
   })
 
   table.insert(tbl[ROLE_GLUTTON], {
-    cvar = "ttt2_glut_turn_rav",
-    checkbox = true,
-    desc = "ttt2_glut_turn_rav (def. 1)"
+      cvar = "ttt2_glut_turn_rav",
+      checkbox = true,
+      desc = "ttt2_glut_turn_rav (def. 1)"
   })
 
   table.insert(tbl[ROLE_GLUTTON], {
-    cvar = "ttt2_glut_hunger",
-    slider = true,
-    min = 30,
-    max = 600,
-    desc = "ttt2_glut_hunger (def. 120)"
+      cvar = "ttt2_glut_hunger",
+      slider = true,
+      min = 30,
+      max = 600,
+      desc = "ttt2_glut_hunger (def. 120)"
   })
 
   table.insert(tbl[ROLE_GLUTTON], {
-    cvar = "ttt2_glut_rav_max_health",
-    slider = true,
-    min = 100,
-    max = 500,
-    decimal = 0,
-    desc = "ttt2_glut_rav_max_health (def. 250)"
+      cvar = "ttt2_glut_rav_max_health",
+      slider = true,
+      min = 100,
+      max = 500,
+      decimal = 0,
+      desc = "ttt2_glut_rav_max_health (def. 250)"
   })
 
   table.insert(tbl[ROLE_GLUTTON], {
-    cvar = "ttt2_glut_devour_dmg_heal",
-    slider = true,
-    min = 0,
-    max = 1,
-    decimal = 1,
-    desc = "ttt2_glut_devour_dmg_heal (def. 0.2)"
+      cvar = "ttt2_glut_devour_dmg_heal",
+      slider = true,
+      min = 0,
+      max = 1,
+      decimal = 1,
+      desc = "ttt2_glut_devour_dmg_heal (def. 0.2)"
   })
 
   table.insert(tbl[ROLE_GLUTTON], {
-    cvar = "ttt2_glut_devour_dmg_hunger",
-    slider = true,
-    min = 0,
-    max = 1,
-    decimal = 1,
-    desc = "ttt2_glut_devour_dmg_hunger (def. 0.1)"
+      cvar = "ttt2_glut_devour_dmg_hunger",
+      slider = true,
+      min = 0,
+      max = 1,
+      decimal = 1,
+      desc = "ttt2_glut_devour_dmg_hunger (def. 0.1)"
   })
 
   table.insert(tbl[ROLE_GLUTTON], {
-    cvar = "ttt2_glut_devour_dmg_base",
-    slider = true,
-    min = 1,
-    max = 100,
-    desc = "ttt2_glut_devour_dmg_base (def. 20)"
+      cvar = "ttt2_glut_devour_dmg_base",
+      slider = true,
+      min = 1,
+      max = 100,
+      desc = "ttt2_glut_devour_dmg_base (def. 20)"
   })
 
   table.insert(tbl[ROLE_GLUTTON], {
-    cvar = "ttt2_glut_devour_dmg_max",
-    slider = true,
-    min = 1,
-    max = 200,
-    desc = "ttt2_glut_devour_dmg_max (def. 100)"
+      cvar = "ttt2_glut_devour_dmg_max",
+      slider = true,
+      min = 1,
+      max = 200,
+      desc = "ttt2_glut_devour_dmg_max (def. 100)"
   })
 
   table.insert(tbl[ROLE_GLUTTON], {
-    cvar = "ttt2_glut_devour_kill_bonus",
-    slider = true,
-    min = 1,
-    max = 10,
-    desc = "ttt2_glut_devour_kill_bonus (def. 10)"
+      cvar = "ttt2_glut_devour_kill_bonus",
+      slider = true,
+      min = 1,
+      max = 10,
+      desc = "ttt2_glut_devour_kill_bonus (def. 10)"
   })
 
   table.insert(tbl[ROLE_GLUTTON], {
-    cvar = "ttt2_glut_devour_kill_feed",
-    slider = true,
-    min = 0,
-    max = 1,
-    decimal = 2,
-    desc = "ttt2_glut_devour_kill_feed (def. 0.20)"
+      cvar = "ttt2_glut_devour_kill_feed",
+      slider = true,
+      min = 0,
+      max = 1,
+      decimal = 2,
+      desc = "ttt2_glut_devour_kill_feed (def. 0.20)"
   })
 
   table.insert(tbl[ROLE_GLUTTON], {
-    cvar = "ttt2_glut_eat_time_base",
-    slider = true,
-    min = 0,
-    max = 2,
-    decimal = 2,
-    desc = "ttt2_glut_eat_time_base (def. 0.50)"
+      cvar = "ttt2_glut_eat_time_base",
+      slider = true,
+      min = 0,
+      max = 2,
+      decimal = 2,
+      desc = "ttt2_glut_eat_time_base (def. 0.50)"
   })
 
   table.insert(tbl[ROLE_GLUTTON], {
-    cvar = "ttt2_glut_eat_time_max",
-    slider = true,
-    min = 0,
-    max = 10,
-    decimal = 2,
-    desc = "ttt2_glut_eat_time_max (def. 5.00)"
+      cvar = "ttt2_glut_eat_time_max",
+      slider = true,
+      min = 0,
+      max = 10,
+      decimal = 2,
+      desc = "ttt2_glut_eat_time_max (def. 5.00)"
   })
 
   table.insert(tbl[ROLE_GLUTTON], {
-    cvar = "ttt2_glut_eat_health",
-    slider = true,
-    min = 1,
-    max = 100,
-    desc = "ttt2_glut_eat_health (def. 50)"
+      cvar = "ttt2_glut_eat_health",
+      slider = true,
+      min = 1,
+      max = 100,
+      desc = "ttt2_glut_eat_health (def. 50)"
   })
 
   table.insert(tbl[ROLE_GLUTTON], {
-    cvar = "ttt2_glut_eat_hunger",
-    slider = true,
-    min = 0,
-    max = 1,
-    decimal = 2,
-    desc = "ttt2_glut_eat_hunger (def. 0.33)"
+      cvar = "ttt2_glut_eat_hunger",
+      slider = true,
+      min = 0,
+      max = 1,
+      decimal = 2,
+      desc = "ttt2_glut_eat_hunger (def. 0.33)"
   })
 
   table.insert(tbl[ROLE_GLUTTON], {
-    cvar = "ttt2_glut_speed_base",
-    slider = true,
-    min = 0,
-    max = 5,
-    decimal = 1,
-    desc = "ttt2_glut_speed_base (def. 1.0)"
+      cvar = "ttt2_glut_speed_base",
+      slider = true,
+      min = 0,
+      max = 5,
+      decimal = 1,
+      desc = "ttt2_glut_speed_base (def. 1.0)"
   })
 
   table.insert(tbl[ROLE_GLUTTON], {
-    cvar = "ttt2_glut_speed_max",
-    slider = true,
-    min = 0,
-    max = 5,
-    decimal = 1,
-    desc = "ttt2_glut_speed_max (def. 2.0)"
+      cvar = "ttt2_glut_speed_max",
+      slider = true,
+      min = 0,
+      max = 5,
+      decimal = 1,
+      desc = "ttt2_glut_speed_max (def. 2.0)"
   })
 
   table.insert(tbl[ROLE_GLUTTON], {
-    cvar = "ttt2_glut_stamina_base",
-    slider = true,
-    min = 0,
-    max = 5,
-    decimal = 1,
-    desc = "ttt2_glut_stamina_base (def. 1.0)"
+      cvar = "ttt2_glut_stamina_base",
+      slider = true,
+      min = 0,
+      max = 5,
+      decimal = 1,
+      desc = "ttt2_glut_stamina_base (def. 1.0)"
   })
 
   table.insert(tbl[ROLE_GLUTTON], {
-    cvar = "ttt2_glut_stamina_max",
-    slider = true,
-    min = 0,
-    max = 5,
-    decimal = 1,
-    desc = "ttt2_glut_stamina_max (def. 2.0)"
+      cvar = "ttt2_glut_stamina_max",
+      slider = true,
+      min = 0,
+      max = 5,
+      decimal = 1,
+      desc = "ttt2_glut_stamina_max (def. 2.0)"
   })
 
   table.insert(tbl[ROLE_GLUTTON], {
-    cvar = "ttt2_glut_rav_grace_time",
-    slider = true,
-    min = 0,
-    max = 10,
-    desc = "ttt2_glut_rav_grace_time (def. 5)"
+      cvar = "ttt2_glut_rav_grace_time",
+      slider = true,
+      min = 0,
+      max = 10,
+      desc = "ttt2_glut_rav_grace_time (def. 5)"
   })
 
 end)
@@ -199,19 +199,19 @@ hook.Add("TTTUlxDynamicRCVars", "ttt2_ulx_dynamic_rav_convars", function(tbl)
   tbl[ROLE_RAVENOUS] = tbl[ROLE_RAVENOUS] or {}
 
   table.insert(tbl[ROLE_RAVENOUS], {
-    cvar = "ttt2_rav_radar_time",
-    slider = true,
-    min = 1,
-    max = 60,
-    desc = "ttt2_rav_radar_time (def. 15)"
+      cvar = "ttt2_rav_radar_time",
+      slider = true,
+      min = 1,
+      max = 60,
+      desc = "ttt2_rav_radar_time (def. 15)"
   })
 
   table.insert(tbl[ROLE_RAVENOUS], {
-    cvar = "ttt2_rav_hurt",
-    slider = true,
-    min = 1,
-    max = 25,
-    desc = "ttt2_rav_hurt (def. 5)"
+      cvar = "ttt2_rav_hurt",
+      slider = true,
+      min = 1,
+      max = 25,
+      desc = "ttt2_rav_hurt (def. 5)"
   })
 
 end)

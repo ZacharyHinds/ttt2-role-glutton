@@ -9,27 +9,27 @@ local AP_NONE = 0
 local AP_RAVENOUS = 4
 
 roles.InitCustomTeam(ROLE.name, {
-  icon = "vgui/ttt/dynamic/roles/icon_rav",
-  color = Color(161, 58, 32, 255)
+    icon = "vgui/ttt/dynamic/roles/icon_rav",
+    color = Color(161, 58, 32, 255)
 })
 
 function ROLE:PreInitialize()
   self.color = Color(171, 51, 21, 255)
 
-	self.abbr = "rav" -- abbreviation
-	self.surviveBonus = 0.5 -- bonus multiplier for every survive while another player was killed
-	self.scoreKillsMultiplier = 5 -- multiplier for kill of player of another team
-	self.scoreTeamKillsMultiplier = -16 -- multiplier for teamkill
+  self.abbr = "rav" -- abbreviation
+  self.surviveBonus = 0.5 -- bonus multiplier for every survive while another player was killed
+  self.scoreKillsMultiplier = 5 -- multiplier for kill of player of another team
+  self.scoreTeamKillsMultiplier = -16 -- multiplier for teamkill
 
-	self.defaultEquipment = SPECIAL_EQUIPMENT -- here you can set up your own default equipment
-	self.defaultTeam = TEAM_RAVENOUS
+  self.defaultEquipment = SPECIAL_EQUIPMENT -- here you can set up your own default equipment
+  self.defaultTeam = TEAM_RAVENOUS
   self.notSelectable = true
 
-	self.conVarData = {
-		credits = 0, -- the starting credits of a specific role
-		traitorButton = 0, -- can use traitor buttons
-		shopFallback = SHOP_DISABLED
-	}
+  self.conVarData = {
+    credits = 0, -- the starting credits of a specific role
+    traitorButton = 0, -- can use traitor buttons
+    shopFallback = SHOP_DISABLED
+  }
 end
 
 function ROLE:Initialize()

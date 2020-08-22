@@ -16,7 +16,7 @@ hook.Add("TTTRenderEntityInfo", "ttt2_glut_traitor_highlight", function(tData)
     local hunger_pct = math.Round(100 - ((hunger_lvl / hunger_max) * 100), 0)
 
     if tData:GetAmountDescriptionLines() > 0 then
-        tData:AddDescriptionLine()
+      tData:AddDescriptionLine()
     end
 
     tData:AddDescriptionLine(

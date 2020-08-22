@@ -13,7 +13,7 @@ if CLIENT then
           ply.BloodEmitter:SetPos(pos)
           ply.BloodNextPart = CurTime() + math.Rand(0.003, 0.01)
 
-          local vec = Vector(math.Rand(-8, 8), math.Rand(-8,8), math.Rand(0, 10))
+          local vec = Vector(math.Rand(-8, 8), math.Rand(-8, 8), math.Rand(0, 10))
           local pos = ply:LocalToWorld(vec)
           local particle = ply.BloodEmitter:Add("particle/snow.vmt", pos)
           particle:SetVelocity(Vector(0, 0, -4) + VectorRand() * 3)
@@ -22,10 +22,10 @@ if CLIENT then
           particle:SetEndAlpha(0)
           local size = math.random(4, 7 + ply:GetNWInt("Appetite", 0))
           particle:SetStartSize(size)
-          particle:SetEndSize(size + 1*(-1 ^ math.random(1,2)))
+          particle:SetEndSize(size + 1 * (-1 ^ math.random(1, 2)))
           particle:SetRoll(0)
           particle:SetRollDelta(0)
-          particle:SetColor(171 - ply:GetNWInt("Appetite")*20, 10, 10)
+          particle:SetColor(171 - ply:GetNWInt("Appetite") * 20, 10, 10)
         end
       else
         if ply.BloodEmitter then
