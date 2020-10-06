@@ -97,6 +97,7 @@ if SERVER then
 
 end
 
+local ttt2_glut_hunger = GetConVar("ttt2_glut_hunger")
 local function GluttonSpeed(ply, _, _, speedMultiplierModifier)
   if not IsValid(ply) then return end
   if not ply:Alive() or ply:IsSpec() then return end
