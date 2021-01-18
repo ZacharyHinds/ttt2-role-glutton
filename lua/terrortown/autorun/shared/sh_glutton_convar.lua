@@ -19,6 +19,7 @@ CreateConVar("ttt2_glut_stamina_max", 2, {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 CreateConVar("ttt2_glut_rav_grace_time", 5, {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 CreateConVar("ttt2_rav_radar_time", 15, {FCVAR_ARCHIVE, FCVAR_NOTIFY}) -- Radar delay for ravenous
 CreateConVar("ttt2_glut_turn_rav", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY})
+CreateConVar("ttt2_rav_alert", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY}) -- Whether or not to send playerwide alert
 
 hook.Add("TTTUlxDynamicRCVars", "ttt2_ulx_dynamic_glut_convars", function(tbl)
   tbl[ROLE_GLUTTON] = tbl[ROLE_GLUTTON] or {}
@@ -212,6 +213,18 @@ hook.Add("TTTUlxDynamicRCVars", "ttt2_ulx_dynamic_rav_convars", function(tbl)
       min = 1,
       max = 25,
       desc = "ttt2_rav_hurt (def. 5)"
+  })
+
+  table.insert(tbl[ROLE_RAVENOUS], {
+    cvar = "ttt2_rav_alert",
+    combobox = true,
+    choices = {
+      "0 - Only transforming player is alerted",
+      "1 - Everyone is alerted",
+      "2 - Traitors are alerted"
+    },
+    numStart = 0,
+    desc = "ttt2_rav_alert (def. 1)"
   })
 
 end)

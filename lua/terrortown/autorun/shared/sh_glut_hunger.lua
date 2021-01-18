@@ -13,9 +13,20 @@ if SERVER then
         if GetConVar("ttt2_glut_turn_rav"):GetBool() then
           ply:SetRole(ROLE_RAVENOUS, TEAM_RAVENOUS)
           SendFullStateUpdate()
-          net.Start("glut_rav")
-          net.WriteString(ply:SteamID64())
-          net.Broadcast()
+          local plys = player.GetAll()
+          for i = 1, #plys do
+            local pl = plys[i]
+            local alert_mode = GetConVar("ttt2_rav_alert")
+            if alert_mode == 1 or pl == ply then
+              net.Start("glut_rav")
+              net.WriteString(ply:SteamID64())
+              net.Send(pl)
+            elseif alert_mode == 2 and pl:HasTeam(TEAM_TRAITOR) then
+              net.Start("glut_rav")
+              net.WriteString(ply:SteamID64())
+              net.Send(pl)
+            end
+          end
         else
           ply:SetNWBool("isStarving", true)
         end
