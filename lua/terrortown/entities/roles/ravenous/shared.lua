@@ -85,9 +85,19 @@ if SERVER then
   ROLE.radarTime = GetConVar("ttt2_rav_radar_time"):GetInt() or 15
 end
 
+local function StripPlyWeps(ply)
+  local weps = ply:GetWeapons()
+  for i = 1, #weps do
+    local wep = weps[i]
+    if wep.SetIronSights then wep:SetIronSights(false) end
+    if wep.SetZoom then wep:SetZoom(false) end
+    ply:StripWeapon(wep:GetClass())
+  end
+end
+
 function ROLE:GiveRoleLoadout(ply, isRoleChange)
   if not isRoleChange then return end
-  ply:StripWeapons()
+  StripPlyWeps(ply)
   ply:GiveEquipmentWeapon("weapon_ttt_glut_bite")
   ply:GiveEquipmentItem("item_ttt_radar")
   ply:SelectWeapon("weapon_ttt_glut_bite")
