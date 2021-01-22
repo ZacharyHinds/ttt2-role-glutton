@@ -9,6 +9,8 @@ if SERVER then
       if ply:GetSubRole() ~= ROLE_GLUTTON then continue end
       if not ply:GetNWBool("HungerGrows", false) then continue end
 
+      if not ply.hungerTime then ply.hungerTime = CurTime() + 1 end
+
       if ply:GetNWInt("Hunger_Level") == 0 and ply.hungerTime <= CurTime() then
         if GetConVar("ttt2_glut_turn_rav"):GetBool() then
           ply:SetRole(ROLE_RAVENOUS, TEAM_RAVENOUS)
