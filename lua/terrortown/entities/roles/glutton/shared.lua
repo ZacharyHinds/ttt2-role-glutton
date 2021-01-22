@@ -76,4 +76,10 @@ if SERVER then
   function ROLE:RemoveRoleLoadout(ply, isRoleChange)
     ply:StripWeapon("weapon_ttt_glut_bite")
   end
+
+  hook.Add("PlayerSpawn", "GlutRavRevive", function(ply)
+    if ply:GetSubRole() ~= ROLE_GLUTTON and ply:GetSubRole() ~= ROLE_RAVENOUS then return end
+    ply.hungerTime = CurTime() + 1
+    ply:GiveEquipmentWeapon("weapon_ttt_glut_bite")
+  end)
 end
