@@ -338,6 +338,8 @@ function SWEP:FinishEat()
   local feed_amount = GetConVar("ttt2_glut_hunger"):GetInt() * GetConVar("ttt2_glut_eat_hunger"):GetFloat()
 
   local health_dif = new_max_health - old_max_health
+  if health_dif <= 0 then health_dif = body_eat_bonus end
+
   self:GetOwner():SetMaxHealth(new_max_health)
   self:GetOwner():SetHealth(math.Clamp(self:GetOwner():Health() + health_dif, 0, GetConVar("ttt2_glut_rav_max_health"):GetInt()))
   -- self:GetOwner():SetNWBool("Ate_Full", true)
