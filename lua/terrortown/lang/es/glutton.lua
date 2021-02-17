@@ -1,4 +1,4 @@
-L = LANG.GetLanguageTableReference("Español")
+L = LANG.GetLanguageTableReference("es")
 
 -- GENERAL ROLE LANGUAGE STRINGS
 L[GLUTTON.name] = "Glotón"
@@ -18,7 +18,7 @@ L["info_popup_" .. RAVENOUS.name] = [[¡Eres un Famélico!
 L["body_found_" .. RAVENOUS.abbr] = "¡Era un Famélico!"
 L["search_role_" .. RAVENOUS.abbr] = "Esta persona era un Famélico."
 L["target_" .. RAVENOUS.name] = "Famélico"
-L["ttt2_desc_" .. RAVENOUS.name] = [[El Famélico es un Glotón que fue consumido por su hambre y ahora necesitará comer más para recuperarse. 
+L["ttt2_desc_" .. RAVENOUS.name] = [[El Famélico es un Glotón que fue consumido por su hambre y ahora necesitará comer más para recuperarse.
 A este nivel tu velocidad y fuerza es absoluta. Sin embargo, ahora no eres más parte de los traidores y estás completamente solo.]]
 
 -- Appetite names
