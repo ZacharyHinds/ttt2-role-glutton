@@ -74,6 +74,7 @@ if SERVER then
   end
 
   function ROLE:RemoveRoleLoadout(ply, isRoleChange)
+    if not isRoleChange or ply:GetSubRole() == ROLE_RAVENOUS then return end
     ply:StripWeapon("weapon_ttt_glut_bite")
   end
 

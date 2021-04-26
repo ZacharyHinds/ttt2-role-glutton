@@ -60,7 +60,7 @@ if SERVER then
     end
 
     for _, pl in ipairs(player.GetAll()) do
-      if not IsValid(pl) or pl == ply or pl:HasTeam(TEAM_RAVENOUS) then continue end
+      if not IsValid(pl) or pl == ply or pl:GetTeam() == TEAM_RAVENOUS then continue end
       if pl:IsSpec() or not pl:Alive() then continue end
 
       local pos = pl:LocalToWorld(pl:OBBCenter())
@@ -89,6 +89,7 @@ local function StripPlyWeps(ply)
   local weps = ply:GetWeapons()
   for i = 1, #weps do
     local wep = weps[i]
+    if wep:GetClass() == "weapon_ttt_glut_bite" then continue end
     if wep.SetIronSights then wep:SetIronSights(false) end
     if wep.SetZoom then wep:SetZoom(false) end
     ply:StripWeapon(wep:GetClass())
