@@ -347,7 +347,12 @@ function SWEP:FinishEat()
     self:GetOwner():SetNWInt("Hunger_Level", self:GetOwner():GetNWInt("Hunger_Level") + feed_amount)
   end
   timer.Remove("EatBlood")
-  if not CLIENT and IsValid(self.eatTarget) then self.eatTarget:Remove() end
+  local rag = self.eatTarget
+  if not CLIENT and IsValid(rag) then 
+    local vic_ply = CORPSE.GetPlayer(rag)
+    events.Trigger(EVENT_BODY_DEVOUR, self:GetOwner(), vic_ply)
+    self.eatTarget:Remove() 
+  end
   self:Reset()
 end
 

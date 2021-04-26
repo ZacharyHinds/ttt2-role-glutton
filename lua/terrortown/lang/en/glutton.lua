@@ -49,3 +49,9 @@ L["glut_rav_all_text"] = "Watch for their bloody trail, they have come to eat!"
 L["glutton_bite_name"] = "Devour"
 L["glutbite_hold_key_to_revive"] = "Hold [{key}] to devour the corpse for health and to fill hunger!"
 L["glutbite_eat_progress"] = "Time left: {time}s"
+
+-- Event Strings
+L["title_event_body_devour"] = "A body was devoured"
+L["desc_event_body_devour"] = "{player} devoured {victim}'s body"
+L["desc_event_glut_rav_starve"] = "{player} starved to death"
+L["title_event_glut_rav_starve"] = "A player starved to death"

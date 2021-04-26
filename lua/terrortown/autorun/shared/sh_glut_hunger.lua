@@ -64,6 +64,8 @@ if SERVER then
       if ply:GetSubRole() ~= ROLE_RAVENOUS and not (ply:GetNWBool("isStarving") and ply:GetSubRole() == ROLE_GLUTTON) then continue end
 
       if ply.hungerTime <= CurTime() then
+        local dmg_amt = GetConVar("ttt2_rav_hurt"):GetInt()
+        if ply:Health() - dmg_amt <= 0 then events.Trigger(EVENT_GLUT_RAV_STARVE, ply) end
         ply:TakeDamage(GetConVar("ttt2_rav_hurt"):GetInt(), game.GetWorld())
         ply.hungerTime = CurTime() + 2
       end
