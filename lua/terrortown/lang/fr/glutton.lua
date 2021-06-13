@@ -12,7 +12,7 @@ Plus tu auras faim plus tu sera fort. Mais attention, si tu la laisses te consum
 
 L[RAVENOUS.name] = "Vorace"
 L[RAVENOUS.defaultTeam] = "Team des Vorace"
-L["hilite_win_" .. RAVENOUS.defaultTeam] = "Tout a été dévoré!"
+L["hilite_win_" .. RAVENOUS.defaultTeam] = "TOUT A ÉTÉ DÉVORÉ!"
 L["info_popup_" .. RAVENOUS.name] = [[Vous êtes Vorace!
 Votre faim vous consume!]]
 L["body_found_" .. RAVENOUS.abbr] = "C'était un Vorace!"
