@@ -23,7 +23,7 @@ if SERVER then
               net.Start("glut_rav")
               net.WriteString(ply:SteamID64())
               net.Send(pl)
-            elseif alert_mode == 2 and pl:HasTeam(TEAM_TRAITOR) then
+            elseif alert_mode == 2 and pl:GetTeam() == TEAM_TRAITOR then
               net.Start("glut_rav")
               net.WriteString(ply:SteamID64())
               net.Send(pl)
