@@ -11,7 +11,7 @@ L["ttt2_desc_" .. GLUTTON.name] = [[The Glutton is a Traitor who can feast on th
 As your hunger grows, so does your strength. But be careful, if you let it consume you'll need to eat everyone to survive!]]
 
 L[RAVENOUS.name] = "Ravenous"
-L[RAVENOUS.defaultTeam] = "TEAM Ravenous"
+L[RAVENOUS.defaultTeam] = "Team Ravenous"
 L["hilite_win_" .. RAVENOUS.defaultTeam] = "All Has Been Devoured!"
 L["info_popup_" .. RAVENOUS.name] = [[You are Ravenous!
 Your Hunger Consumes!]]
