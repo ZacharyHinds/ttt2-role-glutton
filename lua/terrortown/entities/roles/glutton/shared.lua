@@ -17,6 +17,8 @@ function ROLE:PreInitialize()
   self.scoreKillsMultiplier = 5 -- multiplier for kill of player of another team
   self.scoreTeamKillsMultiplier = -16 -- multiplier for teamkill
 
+  self.isOminiscientRole = true
+
   self.defaultEquipment = SPECIAL_EQUIPMENT -- here you can set up your own default equipment
   self.defaultTeam = TEAM_TRAITOR
 
