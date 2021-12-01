@@ -49,3 +49,36 @@ L["glut_rav_all_text"] = "Guarda i suoi passi insanguinati, Stanno venendo a man
 L["glutton_bite_name"] = "Divorare"
 L["glutbite_hold_key_to_revive"] = "Tieni [{key}] per mangiare i cadaveri per la vita e diminuire la fame!"
 L["glutbite_eat_progress"] = "Tempo rimasto: {time} secondi"
+
+--SETTING STRINGS
+    --GLUTTON
+    -- L["label_ttt2_eat_bleed_amount"] = "Blood decal spawn rate when eating"
+    -- L["label_ttt2_glut_hunger"] = "Seconds to completely empty hunger"
+    -- L["label_ttt2_glut_rav_max_health"] = "Maximum health"
+    -- L["label_ttt2_glut_devour_dmg_heal"] = "Healing from Devour damage"
+    -- L["label_ttt2_glut_devour_dmg_hunger"] = "Hunger replenish Devour from damage"
+    -- L["label_ttt2_glut_devour_dmg_base"] = "Base Devour damage"
+    -- L["label_ttt2_glut_devour_dmg_max"] = "Maximum Devour damage"
+    -- L["label_ttt2_glut_devour_kill_bonus"] = "Healing from kill with Devour"
+    -- L["label_ttt2_glut_devour_kill_feed"] = "Hunger replenish from kill with Devour"
+    -- L["label_ttt2_glut_eat_time_base"] = "Base time to eat"
+    -- L["label_ttt2_glut_eat_time_max"] = "Maximum time to eat"
+    -- L["label_ttt2_glut_eat_health"] = "Health from Devouring player corpse"
+    -- L["label_ttt2_glut_eat_hunger"] = "Hunger replenish from Devouring player corpse"
+    -- L["label_ttt2_glut_speed_base"] = "Base movement speed multiplier with Devour equipped"
+    -- L["label_ttt2_glut_speed_max"] = "Maximum speed multiplier with Devour equipped"
+    -- L["label_ttt2_glut_stamina_base"] = "Base stamina regen multiplier with Devour equipped"
+    -- L["label_ttt2_glut_stamina_max"] = "Maximum stamina multiplier with Devour equipped"
+    -- L["label_ttt2_glut_rav_grace_time"] = "Seconds it takes to transform after empty hunger"
+        
+    --RAVENOUS
+    -- L["label_ttt2_rav_radar_time"] = "Delay between radar pulses"
+    -- L["label_ttt2_rav_hurt"] = "Damage received per tick"
+    -- L["label_ttt2_rav_alert"] = "Transformation Alert Mode"
+    -- L["label_ttt2_rav_alert_info"] = [[
+    --     Ravenous Alert Modes:
+        
+    --     0 - No Alert except for transforming player
+    --     1 - Alert All Players
+    --     2 - Alert Glutton's Teammates
+    -- ]]

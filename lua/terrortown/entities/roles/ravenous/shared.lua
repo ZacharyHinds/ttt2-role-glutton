@@ -1,5 +1,5 @@
 if SERVER then
-  CreateConVar("ttt2_rav_radar_time", 15, {FCVAR_ARCHIVE, FCVAR_NOTIFY}) -- Radar delay for ravenous
+  -- CreateConVar("ttt2_rav_radar_time", 15, {FCVAR_ARCHIVE, FCVAR_NOTIFY}) -- Radar delay for ravenous
   AddCSLuaFile()
   resource.AddFile("materials/vgui/ttt/dynamic/roles/icon_rav.vmt")
 
@@ -112,61 +112,46 @@ function ROLE:RemoveRoleLoadout(ply, isRoleChange)
   ply:RemoveEquipmentItem("item_ttt_radar")
 end
 
--- if SERVER then
---
---   -- Ravenous has a custom radar
---   -- Shows players and corpses
---
---
---   -- hook.Add("TTTEndRound", "ClearRavBlood", function()
---   --   for _, ply in ipairs(player.GetAll()) do
---   --     ply:SetNWInt("Hunger", nil)
---   --     ply:SetNWBool("DoBloody", false)
---   --     ply:SetNWInt("Appetite", nil)
---   --     ply:SetNWBool("Ate_Full", false)
---   --   end
---   -- end)
---
---   -- hook.Add("Think", "ThinkRav", function()
---   --   for _, ply in ipairs(player.GetAll()) do
---   --     if ply:IsActive() and ply:GetSubRole() == ROLE_RAVENOUS then
---   --       if ply:GetNWInt("Hunger", 0) < CurTime() and ply:GetSubRole() == ROLE_RAVENOUS then
---   --         ply:TakeDamage(GetConVar("ttt2_rav_hurt"):GetInt(), game.GetWorld())
---   --         ply:SetNWInt("Hunger", CurTime() + 2)
---   --       end
---   --     end
---   --   end
---   -- end)
---
---   -- hook.Add("TTTPlayerSpeedModifier", "RavSpeedRun", function(ply, _, _, speedMultiplierModifier)
---   --   if not IsValid(ply) then return end
---   --   if ply:GetSubRole() ~= ROLE_RAVENOUS then return end
---   --
---   --   speedMultiplierModifier[1] = speedMultiplierModifier[1] * GetConVar("ttt2_rav_speed_bonus"):GetFloat()
---   -- end)
---   --
---   -- hook.Add("TTT2StaminaRegen", "RavStaminaRegen", function(ply, stamina_mod)
---   --   if not IsValid(ply) then return end
---   --   if ply:GetSubRole() ~= ROLE_RAVENOUS then return end
---   --
---   --   stamina_mod[1] = stamina_mod[1] * GetConVar("ttt2_rav_stam_regen"):GetFloat()
---   -- end)
---   --
---   -- hook.Add("TTTEndRound", "ClearRavHunger", function()
---   --   for _, ply in ipairs(player.GetAll()) do
---   --     ply:SetNWInt("Appetite", 0)
---   --     ply:SetNWInt("Hunger", 0)
---   --     ply:SetNWBool("Ate_Full", false)
---   --     ply:SetNWBool("Ate_Part", false)
---   --   end
---   -- end)
---   --
---   -- hook.Add("TTTPrepRound", "PrepRavHunger", function()
---   --   for _, ply in ipairs(player.GetAll()) do
---   --     ply:SetNWInt("Appetite", 0)
---   --     ply:SetNWInt("Hunger", 0)
---   --     ply:SetNWBool("Ate_Full", false)
---   --     ply:SetNWBool("Ate_Part", false)
---   --   end
---   -- end)
--- end
+if CLIENT then
+  function ROLE:AddToSettingsMenu(parent)
+    local form = vgui.CreateTTT2Form(parent, "header_roles_additional")
+
+    form:MakeSlider({
+      serverConvar = "ttt2_rav_radar_time",
+      label = "label_ttt2_rav_radar_time",
+      min = 1,
+      max = 60,
+      decimal = 0
+    })
+
+    form:MakeSlider({
+      serverConvar = "ttt2_rav_hurt",
+      label = "label_ttt2_rav_hurt",
+      min = 1,
+      max = 25,
+      decimal = 0
+    })
+
+    -- form:MakeComboBox({
+    --   serverConvar = "ttt2_rav_alert",
+    --   label = "label_ttt2_rav_alert",
+    --   choices = {"label_ttt2_rav_alert_0", "label_ttt2_rav_alert_1", "label_ttt2_rav_alert_2"},
+    --   OnChange = function(_, index, _)
+    --     RunConsoleCommand("ttt2_rav_alert", index)
+    --   end
+    -- })
+
+    form:MakeHelp({
+      label = "label_ttt2_rav_alert_info"
+    })
+
+    form:MakeSlider({
+      serverConvar = "ttt2_rav_alert",
+      label = "label_ttt2_rav_alert",
+      min = 0,
+      max = 2,
+      decimal = 0
+    })
+
+  end
+end
